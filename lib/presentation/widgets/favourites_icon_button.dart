@@ -5,9 +5,11 @@ class FavouritesIconButton extends StatelessWidget {
   const FavouritesIconButton({
     super.key,
     required this.isFavorite,
+    this.inactiveColor,
   });
 
   final bool isFavorite;
+  final Color? inactiveColor;
 
   @override
   Widget build(BuildContext context) {
@@ -19,8 +21,9 @@ class FavouritesIconButton extends StatelessWidget {
       icon: Icon(
         isFavorite ? Icons.favorite : Icons.favorite_border,
         size: 20,
-        color:
-            isFavorite ? AppColors.accentRed : AppColors.textGrey40,
+        color: isFavorite
+            ? AppColors.accentRed
+            : inactiveColor ?? AppColors.textGrey40,
       ),
     );
   }

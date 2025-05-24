@@ -5,7 +5,6 @@ import 'package:flutter_fake_store/core/utils/extensions/context_extensions.dart
 import 'package:flutter_fake_store/core/utils/theme/app_colors.dart';
 import 'package:flutter_fake_store/core/utils/theme/app_text_styles.dart';
 import 'package:flutter_fake_store/presentation/widgets/favourites_icon_button.dart';
-import 'package:flutter_fake_store/presentation/widgets/page_spacing.dart';
 
 class ProductDetailPage extends StatelessWidget {
   const ProductDetailPage({super.key});
@@ -17,6 +16,7 @@ class ProductDetailPage extends StatelessWidget {
     const String subtitle = 'Product Subtitle';
     const String price = '\$99.99';
     const String buttonText = 'Add to Cart';
+    const int reviewCount = 100;
 
     return Scaffold(
       backgroundColor: AppColors.lightBackground,
@@ -32,11 +32,13 @@ class ProductDetailPage extends StatelessWidget {
           const Spacer(),
           const FavouritesIconButton(
             isFavorite: false,
+            inactiveColor: AppColors.textGrey80,
           ),
         ],
       ),
       body: LayoutBuilder(
         builder: (context, constraints) {
+          const rating = '4.5';
           return Stack(
             children: [
               // Background Image Section (centered top)
@@ -83,19 +85,37 @@ class ProductDetailPage extends StatelessWidget {
                         vertical: 24,
                       ),
                       color: AppColors.pureWhite,
-                      child: const Column(
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          const Text(
                             title,
-                            style: AppTextStyles.urbanist12600DarkCharcoal,
+                            style: AppTextStyles.urbanist24600TextGrey75,
                           ),
-                          SizedBox(height: 8),
-                          Text(
+                          const SizedBox(height: 8),
+                          const Text(
                             subtitle,
-                            style: AppTextStyles.urbanist14600DarkCharcoal,
+                            style: AppTextStyles.urbanist14600TextGrey,
                           ),
-                          SizedBox(height: 24),
+                          const SizedBox(height: 8),
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons.star,
+                                size: 16,
+                              ),
+                              const SizedBox(width: 4),
+                              const Text(
+                                rating,
+                                style: AppTextStyles.urbanist14600DarkCharcoal,
+                              ),
+                              const SizedBox(width: 6),
+                              Text(
+                                '$reviewCount ${context.review}${reviewCount > 1 ? 's' : ''}',
+                                style: AppTextStyles.urbanist14600TextGrey60,
+                              ),
+                            ],
+                          ),
                         ],
                       ),
                     ),
