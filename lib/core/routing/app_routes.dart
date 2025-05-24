@@ -15,7 +15,7 @@ final _cartShellNavigatorKey = GlobalKey<NavigatorState>();
 
 class AppRoutes {
   static final GoRouter router = GoRouter(
-    initialLocation: cart,
+    initialLocation: wishlist,
     navigatorKey: _rootNavigatorKey,
     routes: [
       GoRoute(
