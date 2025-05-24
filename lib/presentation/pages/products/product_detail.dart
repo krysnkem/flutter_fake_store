@@ -17,6 +17,7 @@ class ProductDetailPage extends StatelessWidget {
     const String price = '\$99.99';
     const String buttonText = 'Add to Cart';
     const int reviewCount = 100;
+    const rating = '4.5';
 
     return Scaffold(
       backgroundColor: AppColors.lightBackground,
@@ -36,129 +37,124 @@ class ProductDetailPage extends StatelessWidget {
           ),
         ],
       ),
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          const rating = '4.5';
-          return Stack(
-            children: [
-              // Background Image Section (centered top)
-              Positioned(
-                top: MediaQuery.sizeOf(context).height * 0.12,
-                left: 0,
-                right: 0,
-                child: Center(
-                  child: FractionallySizedBox(
-                    widthFactor: 0.7,
-                    child: AspectRatio(
-                      aspectRatio: 1,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: imageUrl.startsWith('http')
-                            ? CachedNetworkImage(
-                                imageUrl: imageUrl,
-                                fit: BoxFit.contain,
-                              )
-                            : Image.asset(
-                                imageUrl,
-                                fit: BoxFit.contain,
-                              ),
-                      ),
-                    ),
+      body: Stack(
+        children: [
+          // Background Image Section (centered top)
+          Positioned(
+            top: MediaQuery.sizeOf(context).height * 0.12,
+            left: 0,
+            right: 0,
+            child: Center(
+              child: FractionallySizedBox(
+                widthFactor: 0.7,
+                child: AspectRatio(
+                  aspectRatio: 1,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: imageUrl.startsWith('http')
+                        ? CachedNetworkImage(
+                            imageUrl: imageUrl,
+                            fit: BoxFit.contain,
+                          )
+                        : Image.asset(
+                            imageUrl,
+                            fit: BoxFit.contain,
+                          ),
                   ),
                 ),
               ),
+            ),
+          ),
 
-              // Foreground Content
-              Positioned(
-                left: 0,
-                right: 0,
-                bottom: 0,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    //product title and subtitle section
-                    Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.symmetric(
-                        horizontal: context.width(24),
-                        vertical: 24,
+          // Foreground Content
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                //product title and subtitle section
+                Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: context.width(24),
+                    vertical: 24,
+                  ),
+                  color: AppColors.pureWhite,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        title,
+                        style: AppTextStyles.urbanist24600TextGrey75,
                       ),
-                      color: AppColors.pureWhite,
-                      child: Column(
+                      const SizedBox(height: 8),
+                      const Text(
+                        subtitle,
+                        style: AppTextStyles.urbanist14600TextGrey,
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.star,
+                            size: 16,
+                          ),
+                          const SizedBox(width: 4),
+                          const Text(
+                            rating,
+                            style: AppTextStyles.urbanist14600DarkCharcoal,
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            '$reviewCount ${context.review}${reviewCount > 1 ? 's' : ''}',
+                            style: AppTextStyles.urbanist14600TextGrey60,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                //price and button section
+                Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: context.width(24),
+                    vertical: 24,
+                  ),
+                  color: AppColors.accentYellow,
+                  child: Row(
+                    children: [
+                      Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            title,
-                            style: AppTextStyles.urbanist24600TextGrey75,
+                          Text(
+                            context.price,
+                            style: AppTextStyles.urbanist12600TextGrey75,
                           ),
-                          const SizedBox(height: 8),
                           const Text(
-                            subtitle,
-                            style: AppTextStyles.urbanist14600TextGrey,
-                          ),
-                          const SizedBox(height: 8),
-                          Row(
-                            children: [
-                              const Icon(
-                                Icons.star,
-                                size: 16,
-                              ),
-                              const SizedBox(width: 4),
-                              const Text(
-                                rating,
-                                style: AppTextStyles.urbanist14600DarkCharcoal,
-                              ),
-                              const SizedBox(width: 6),
-                              Text(
-                                '$reviewCount ${context.review}${reviewCount > 1 ? 's' : ''}',
-                                style: AppTextStyles.urbanist14600TextGrey60,
-                              ),
-                            ],
+                            price,
+                            style: AppTextStyles.lora20600TextGrey80,
                           ),
                         ],
                       ),
-                    ),
-                    //price and button section
-                    Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.symmetric(
-                        horizontal: context.width(24),
-                        vertical: 24,
+                      const SizedBox(width: 24),
+                      Expanded(
+                        flex: 2,
+                        child: ElevatedButton(
+                          onPressed: () {},
+                          child: const Text(buttonText),
+                        ),
                       ),
-                      color: AppColors.accentYellow,
-                      child: Row(
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                context.price,
-                                style: AppTextStyles.urbanist12600TextGrey75,
-                              ),
-                              const Text(
-                                price,
-                                style: AppTextStyles.lora20600TextGrey80,
-                              ),
-                            ],
-                          ),
-                          const SizedBox(width: 24),
-                          Expanded(
-                            flex: 2,
-                            child: ElevatedButton(
-                              onPressed: () {},
-                              child: const Text(buttonText),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          );
-        },
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
