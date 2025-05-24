@@ -8,7 +8,10 @@ import 'package:flutter_fake_store/data/models/product/product.dart';
 import 'package:flutter_fake_store/data/models/result.dart';
 import 'package:flutter_fake_store/data/repositories/data_repository.dart';
 import 'package:flutter_fake_store/data/repositories/safe_call.dart';
+import 'package:injectable/injectable.dart';
 
+
+@LazySingleton(as: DataRepository)
 class DataRepositoryImpl with SafeCall implements DataRepository {
   final ApiClient _apiClient;
   final CacheService _cacheService;
