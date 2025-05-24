@@ -1,4 +1,5 @@
 import 'package:flutter_fake_store/data/models/auth/login_response.dart';
+import 'package:flutter_fake_store/data/models/auth/saved_user.dart';
 import 'package:flutter_fake_store/data/models/cart/cart_item.dart';
 import 'package:flutter_fake_store/data/models/product/product.dart';
 import 'package:flutter_fake_store/data/models/result.dart';
@@ -13,8 +14,7 @@ abstract class DataRepository {
 
   Future<Result<void>> logout();
 
-  Future<Result<bool>> isLoggedIn();
-
+  Future<Result<(bool, SavedUser)>> isLoggedIn();
   // Products
   Future<Result<List<Product>>> getProducts();
 

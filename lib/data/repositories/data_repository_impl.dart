@@ -3,13 +3,13 @@ import 'dart:convert';
 import 'package:flutter_fake_store/data/api/api_client.dart';
 import 'package:flutter_fake_store/data/cache/cache_service.dart';
 import 'package:flutter_fake_store/data/models/auth/login_response.dart';
+import 'package:flutter_fake_store/data/models/auth/saved_user.dart';
 import 'package:flutter_fake_store/data/models/cart/cart_item.dart';
 import 'package:flutter_fake_store/data/models/product/product.dart';
 import 'package:flutter_fake_store/data/models/result.dart';
 import 'package:flutter_fake_store/data/repositories/data_repository.dart';
 import 'package:flutter_fake_store/data/repositories/safe_call.dart';
 import 'package:injectable/injectable.dart';
-
 
 @LazySingleton(as: DataRepository)
 class DataRepositoryImpl with SafeCall implements DataRepository {
@@ -21,6 +21,7 @@ class DataRepositoryImpl with SafeCall implements DataRepository {
   static const String _cartKey = 'cart';
   static const String _favoritesKey = 'favorites';
   static const String _isLoggedInKey = 'is_logged_in';
+  static const String _usernameKey = 'username';
 
   @override
   Future<Result<void>> addToCart(Product product, {int quantity = 1}) async {
@@ -150,10 +151,11 @@ class DataRepositoryImpl with SafeCall implements DataRepository {
           .toList());
 
   @override
-  Future<Result<LoginResponse>> login(
-          {required String email,
-          required String password,
-          required String username}) =>
+  Future<Result<LoginResponse>> login({
+    required String email,
+    required String password,
+    required String username,
+  }) =>
       safeApiCall(
         apiCall: () => _apiClient.login(
           email: email,
@@ -166,6 +168,7 @@ class DataRepositoryImpl with SafeCall implements DataRepository {
         if (result is Success<LoginResponse>) {
           // Save login status
           _cacheService.write(_isLoggedInKey, jsonEncode(true));
+          _cacheService.write(_usernameKey, username);
         }
         return result;
       });
@@ -177,6 +180,7 @@ class DataRepositoryImpl with SafeCall implements DataRepository {
         _cacheService.delete(_cartKey),
         _cacheService.delete(_favoritesKey),
         _cacheService.delete(_isLoggedInKey),
+        _cacheService.delete(_usernameKey),
       ]);
       return Success();
     } catch (e) {
@@ -240,10 +244,16 @@ class DataRepositoryImpl with SafeCall implements DataRepository {
   }
 
   @override
-  Future<Result<bool>> isLoggedIn() async {
+  Future<Result<(bool, SavedUser)>> isLoggedIn() async {
     try {
       final isLoggedIn = await _cacheService.read(_isLoggedInKey);
-      return Success(data: isLoggedIn != null);
+      final username = await _cacheService.read(_usernameKey);
+      return Success(
+        data: (
+          isLoggedIn != null,
+          SavedUser(username: username ?? ''),
+        ),
+      );
     } catch (e) {
       return Failure(message: 'Failed to check login status: ${e.toString()}');
     }

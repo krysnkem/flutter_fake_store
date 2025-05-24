@@ -16,3 +16,11 @@ class AuthLoginEvent extends AuthEvent {
     required this.password,
   });
 }
+
+class AuthLogoutEvent extends AuthEvent {
+  const AuthLogoutEvent();
+}
+
+class AuthCheckEvent extends AuthEvent {
+  const AuthCheckEvent();
+}

@@ -1,6 +1,8 @@
 import 'package:flutter_fake_store/data/cache/cache_service.dart';
+import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+@LazySingleton(as: CacheService)
 class SharedPreferenceCacheImpl implements CacheService {
   final SharedPreferences _sharedPreferences;
 
