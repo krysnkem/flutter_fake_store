@@ -58,6 +58,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   FutureOr<void> _onCheckAuth(
       AuthCheckEvent event, Emitter<AuthState> emit) async {
+    emit(AuthCheckLoadingState());
     final result = await _dataRepository.isLoggedIn();
     try {
       if (result is Success) {

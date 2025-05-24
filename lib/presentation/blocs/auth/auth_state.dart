@@ -8,6 +8,7 @@ sealed class AuthState extends Equatable {
 class AuthInitState extends AuthState {}
 class AuthLoadingState extends AuthState {}
 class AuthLogoutLoadingState extends AuthState {}
+class AuthCheckLoadingState extends AuthState {}
 class AuthAuthenticatedState extends AuthState {
   final String username;
   AuthAuthenticatedState({required this.username});

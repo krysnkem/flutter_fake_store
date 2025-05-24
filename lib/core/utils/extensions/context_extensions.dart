@@ -27,4 +27,10 @@ extension ContextTextExtensions on BuildContext {
   String get cartTotal => 'Cart Total';
   String get checkout => 'Checkout';
   String get wishList => 'Wishlist';
+  String get loginSuccess => 'Login successful!';
+  String get loginError => 'Login failed. Please try again.';
+  String get logoutSuccess => 'Logout successful!';
+  String get logoutError => 'Logout failed. Please try again.';
+  String get noItemsInCart => 'No items in cart';
+  String get noItemsInWishlist => 'No items in wishlist';
 }

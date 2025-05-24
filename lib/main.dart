@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp.router(
-        title: 'Flutter Demo',
+        title: 'Flutter Fake Store',
         theme: AppTheme.lightTheme,
         routerConfig: AppRoutes.router,
         debugShowCheckedModeBanner: false,
