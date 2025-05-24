@@ -15,7 +15,6 @@ class ProductDetailPage extends StatelessWidget {
     const String title = 'Product Title';
     const String subtitle = 'Product Subtitle';
     const String price = '\$99.99';
-    const String buttonText = 'Add to Cart';
     const int reviewCount = 100;
     const rating = '4.5';
 

@@ -31,115 +31,122 @@ class CartListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final bool isNetworkImage =
         imageUrl.startsWith('http://') || imageUrl.startsWith('https://');
-    return Slidable(
-      key: ValueKey(productId ?? title),
-      endActionPane: ActionPane(
-        motion: const DrawerMotion(),
-        extentRatio: 0.25,
-        children: [
-          CustomSlidableAction(
-            onPressed: (context) {
-              // Remove the notification
-              showDeleteDialog(context);
-              // Show undo SnackBar
-            },
-            backgroundColor: AppColors.deleteRed,
-            child: const Icon(
-              Icons.delete_outline,
-              color: AppColors.pureWhite,
-              size: 20, // Specify exact size you want
-            ),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 24.0),
+      child: Material(
+        color: Colors.transparent,
+        child: Slidable(
+          key: ValueKey(productId ?? title),
+          endActionPane: ActionPane(
+            motion: const DrawerMotion(),
+            extentRatio: 0.25,
+            children: [
+              CustomSlidableAction(
+                onPressed: (context) {
+                  // Remove the notification
+                  showDeleteDialog(context);
+                  // Show undo SnackBar
+                },
+                backgroundColor: AppColors.deleteRed,
+                child: const Icon(
+                  Icons.delete_outline,
+                  color: AppColors.pureWhite,
+                  size: 20, // Specify exact size you want
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
-      child: PageSpacing(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            // Column 1: Image
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+          child: PageSpacing(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(
-                  width: 70,
-                  height: 70,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(4),
-                    child: isNetworkImage
-                        ? CachedNetworkImage(
-                            imageUrl: imageUrl,
-                            fit: BoxFit.cover,
-                            placeholder: (context, url) => const Center(
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2.0,
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                  AppColors.accentYellow,
+                // Column 1: Image
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: 70,
+                      height: 70,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(4),
+                        child: isNetworkImage
+                            ? CachedNetworkImage(
+                                imageUrl: imageUrl,
+                                fit: BoxFit.cover,
+                                placeholder: (context, url) => const Center(
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2.0,
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                      AppColors.accentYellow,
+                                    ),
+                                  ),
                                 ),
+                                errorWidget: (context, url, error) =>
+                                    const Icon(
+                                  Icons.error_outline,
+                                  color: AppColors.accentRed,
+                                  size: 30,
+                                ),
+                              )
+                            : Image.asset(
+                                imageUrl,
+                                fit: BoxFit.cover,
                               ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  width: 16,
+                ),
+                // Column 2: Text
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: AppTextStyles.urbanist16600PureBlack,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 12),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          _quantityButton(
+                            icon: Icons.remove_circle_outline,
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(6),
+                              bottomLeft: Radius.circular(6),
                             ),
-                            errorWidget: (context, url, error) => const Icon(
-                              Icons.error_outline,
-                              color: AppColors.accentRed,
-                              size: 30,
-                            ),
-                          )
-                        : Image.asset(
-                            imageUrl,
-                            fit: BoxFit.cover,
+                            onTap: () {}, // Add your logic here
                           ),
+                          _quantityDisplay('1'),
+                          _quantityButton(
+                            icon: Icons.add_circle_outline,
+                            borderRadius: const BorderRadius.only(
+                              topRight: Radius.circular(6),
+                              bottomRight: Radius.circular(6),
+                            ),
+                            onTap: () {}, // Add your logic here
+                          ),
+                        ],
+                      )
+                    ],
                   ),
+                ),
+
+                const SizedBox(width: 12),
+
+                // Column 3: Icon
+                Text(
+                  '\$$price',
+                  style: AppTextStyles.urbanist14600PureBlack,
                 ),
               ],
             ),
-            const SizedBox(
-              width: 16,
-            ),
-            // Column 2: Text
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: AppTextStyles.urbanist16600PureBlack,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 12),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      _quantityButton(
-                        icon: Icons.remove_circle_outline,
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(6),
-                          bottomLeft: Radius.circular(6),
-                        ),
-                        onTap: () {}, // Add your logic here
-                      ),
-                      _quantityDisplay('1'),
-                      _quantityButton(
-                        icon: Icons.add_circle_outline,
-                        borderRadius: const BorderRadius.only(
-                          topRight: Radius.circular(6),
-                          bottomRight: Radius.circular(6),
-                        ),
-                        onTap: () {}, // Add your logic here
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            ),
-
-            const SizedBox(width: 12),
-
-            // Column 3: Icon
-            Text(
-              '\$$price',
-              style: AppTextStyles.urbanist14600PureBlack,
-            ),
-          ],
+          ),
         ),
       ),
     );

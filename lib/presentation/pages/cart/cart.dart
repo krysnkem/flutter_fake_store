@@ -41,13 +41,20 @@ class CartPage extends StatelessWidget {
               height: context.height(32),
             ),
 
-            CartListItem(
-              imageUrl: imageUrl,
-              title: title,
-              category: category,
-              rating: rating,
-              price: price,
-              isFavorite: isFavorite,
+            Expanded(
+              child: ListView.builder(
+                itemBuilder: (context, index) {
+                  return CartListItem(
+                    imageUrl: imageUrl,
+                    title: title,
+                    category: category,
+                    rating: rating,
+                    price: price,
+                    isFavorite: isFavorite,
+                  );
+                },
+                itemCount: 10,
+              ),
             ),
 
             Container(
@@ -56,7 +63,14 @@ class CartPage extends StatelessWidget {
                 horizontal: context.width(24),
                 vertical: 24,
               ),
-              color: AppColors.pureWhite,
+              decoration: const BoxDecoration(
+                color: AppColors.pureWhite,
+                border: Border(
+                    top: BorderSide(
+                  color: AppColors.cardGrey,
+                  width: 1,
+                )),
+              ),
               child: Row(
                 children: [
                   Column(
