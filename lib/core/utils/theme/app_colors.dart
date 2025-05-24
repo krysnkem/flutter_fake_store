@@ -6,6 +6,7 @@ class AppColors {
   static const Color accentYellow = Color(0xffFFE8B2);
   static const Color cardGrey = Color(0xfff2f2f2);
   static const Color accentRed = Color(0xffEB4335);
+  static const Color deleteRed = Color(0xffCC474E);
   static const Color textGrey = Color(0x80000000);
   static const Color textGrey40 = Color(0xBFCBCBD4);
   static const Color textGrey70 = Color(0xBF000000);
@@ -23,4 +24,5 @@ class AppColors {
   static const Color buttonBlack = Color(0xFF1e1e1e);
   static const Color fieldGreyFill = Color(0xFFF7F8F9);
   static const Color fieldGreyBorder = Color(0xFFE8ECF4);
+  static const Color buttonOutlineGrey = Color(0xFFD9D9D9);
 }

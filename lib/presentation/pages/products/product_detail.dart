@@ -145,7 +145,7 @@ class ProductDetailPage extends StatelessWidget {
                         flex: 2,
                         child: ElevatedButton(
                           onPressed: () {},
-                          child: const Text(buttonText),
+                          child: Text(context.addToCart),
                         ),
                       ),
                     ],
