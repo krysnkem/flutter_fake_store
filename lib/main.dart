@@ -4,6 +4,7 @@ import 'package:flutter_fake_store/core/routing/app_routes.dart';
 import 'package:flutter_fake_store/core/utils/theme/app_theme.dart';
 import 'package:flutter_fake_store/injection/injection.dart';
 import 'package:flutter_fake_store/presentation/blocs/auth/auth_bloc.dart';
+import 'package:flutter_fake_store/presentation/blocs/auth/auth_event.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
@@ -25,7 +26,8 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => getIt<AuthBloc>(),
+          create: (context) => getIt<AuthBloc>()..add(const AuthCheckEvent()),
+          lazy: true,
         ),
       ],
       child: MaterialApp.router(

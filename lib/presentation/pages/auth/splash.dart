@@ -5,29 +5,13 @@ import 'package:flutter_fake_store/core/routing/app_routes.dart';
 import 'package:flutter_fake_store/core/utils/extensions/context_extensions.dart';
 import 'package:flutter_fake_store/core/utils/theme/app_text_styles.dart';
 import 'package:flutter_fake_store/presentation/blocs/auth/auth_bloc.dart';
-import 'package:flutter_fake_store/presentation/blocs/auth/auth_event.dart';
 import 'package:flutter_fake_store/presentation/blocs/auth/auth_state.dart';
 import 'package:flutter_fake_store/presentation/widgets/custom_button.dart';
 import 'package:flutter_fake_store/presentation/widgets/page_spacing.dart';
 import 'package:go_router/go_router.dart';
 
-class Splash extends StatefulWidget {
+class Splash extends StatelessWidget {
   const Splash({super.key});
-
-  @override
-  State<Splash> createState() => _SplashState();
-}
-
-class _SplashState extends State<Splash> {
-  @override
-  void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) {
-        context.read<AuthBloc>().add(const AuthCheckEvent());
-      }
-    });
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
