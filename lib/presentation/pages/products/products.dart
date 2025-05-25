@@ -30,18 +30,20 @@ class ProductsPage extends StatelessWidget {
                         '${context.welcome},',
                         style: AppTextStyles.urbanist24600TextBlack,
                       ),
-                      Builder(builder: (context) {
-                        final username = context.select<AuthBloc, String?>(
-                            (authbloc) =>
-                                authbloc.state is AuthAuthenticatedState
-                                    ? (authbloc.state as AuthAuthenticatedState)
-                                        .username
-                                    : null);
-                        return Text(
-                          username ?? 'username',
-                          style: AppTextStyles.urbanist24600TextBlack,
-                        );
-                      }),
+                      Builder(
+                        builder: (context) {
+                          final username = context.select<AuthBloc, String?>(
+                              (authbloc) => authbloc.state
+                                      is AuthAuthenticatedState
+                                  ? (authbloc.state as AuthAuthenticatedState)
+                                      .username
+                                  : null);
+                          return Text(
+                            username ?? 'username',
+                            style: AppTextStyles.urbanist24600TextBlack,
+                          );
+                        },
+                      ),
                     ],
                   ),
                   const Spacer(),
