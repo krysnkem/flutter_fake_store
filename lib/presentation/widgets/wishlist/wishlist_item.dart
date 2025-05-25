@@ -15,6 +15,8 @@ class WishListItem extends StatelessWidget {
     required this.price,
     required this.isFavorite,
     this.productId,
+    this.onAddToWishList,
+    this.onAddToCart,
   });
 
   final String imageUrl;
@@ -24,13 +26,15 @@ class WishListItem extends StatelessWidget {
   final String price;
   final bool isFavorite;
   final String? productId;
+  final VoidCallback? onAddToWishList;
+  final VoidCallback? onAddToCart;
 
   @override
   Widget build(BuildContext context) {
     final bool isNetworkImage =
         imageUrl.startsWith('http://') || imageUrl.startsWith('https://');
     return Container(
-      height: 100,
+      height: 120,
       margin: const EdgeInsets.only(bottom: 8),
       decoration: BoxDecoration(
         color: AppColors.cardGrey,
@@ -91,23 +95,18 @@ class WishListItem extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 2),
+                  const SizedBox(height: 8),
                   Text(
                     '\$$price',
                     style: AppTextStyles.urbanist12600PureBlack50,
                     maxLines: 2, // Try adjusting this as needed
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const Spacer(),
+                  const SizedBox(height: 8),
                   Material(
                     color: Colors.transparent,
                     child: InkWell(
-                      onTap: () {
-                        // Handle tap event, e.g., navigate to product detail
-                        if (productId != null) {
-                          // Navigate to product detail page with productId
-                        }
-                      },
+                      onTap: () => onAddToCart?.call(),
                       child: Ink(
                         width: double.infinity,
                         padding: const EdgeInsets.symmetric(
@@ -117,11 +116,13 @@ class WishListItem extends StatelessWidget {
                           color: AppColors.pureWhite,
                           borderRadius: BorderRadius.circular(6),
                         ),
-                        child: Text(
-                          context.addToCart,
-                          style: AppTextStyles.urbanist14600PureBlack,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+                        child: Center(
+                          child: Text(
+                            context.addToCart,
+                            style: AppTextStyles.urbanist14600PureBlack,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
                       ),
                     ),
@@ -134,11 +135,12 @@ class WishListItem extends StatelessWidget {
           const SizedBox(width: 12),
 
           // Column 3: Icon
-          const Column(
+          Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               FavouritesIconButton(
-                isFavorite: false,
+                isFavorite: isFavorite,
+                onToggleWishlist: onAddToWishList,
                 inactiveColor: AppColors.textGrey80,
               ),
             ],

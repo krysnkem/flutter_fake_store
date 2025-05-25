@@ -240,7 +240,7 @@ class _ProductListSectionState extends State<ProductListSection> {
             final product = widget.products[index];
             var imageUrl = product.image;
             final title = product.title;
-            final category = product.category;
+            final category = product.category.toUpperCase();
             final rating = product.rating.rate.toStringAsFixed(2);
             var price = product.price.toStringAsFixed(2);
             final isFavorite = widget.wishListProductIds.contains(product.id);

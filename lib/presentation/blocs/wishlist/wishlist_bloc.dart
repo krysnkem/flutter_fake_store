@@ -52,6 +52,9 @@ class WishlistBloc extends Bloc<WishlistEvent, WishlistState> {
     switch (state) {
       case WishlistLoaded(:final productIds):
       case WislistUpdateError(:final productIds):
+        if (productIds.contains(event.productId)) {
+          return;
+        }
         originalIds = Set<int>.from(productIds); // Create new copy
         updatedIds = Set<int>.from(productIds)..add(event.productId); // NEW Set
         break;

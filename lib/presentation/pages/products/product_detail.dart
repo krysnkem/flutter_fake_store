@@ -9,6 +9,7 @@ import 'package:flutter_fake_store/data/models/product/product.dart';
 import 'package:flutter_fake_store/presentation/blocs/wishlist/wishlist_bloc.dart';
 import 'package:flutter_fake_store/presentation/blocs/wishlist/wishlist_event.dart';
 import 'package:flutter_fake_store/presentation/blocs/wishlist/wishlist_state.dart';
+import 'package:flutter_fake_store/presentation/widgets/expandable_text.dart';
 import 'package:flutter_fake_store/presentation/widgets/favourites_icon_button.dart';
 
 class ProductDetailPage extends StatelessWidget {
@@ -24,7 +25,7 @@ class ProductDetailPage extends StatelessWidget {
     final String description = product?.description ?? 'Product Subtitle';
     final String price = '\$${product?.price.toStringAsFixed(2) ?? '0.00'}';
     final int reviewCount = product?.rating.count ?? 100;
-    final rating = '\$${product?.rating.rate.toStringAsFixed(2) ?? '0.00'}';
+    final rating = product?.rating.rate.toStringAsFixed(2) ?? '0.00';
 
     final wishlistProductIds = <int>[];
     final wishlistBloc = context.watch<WishlistBloc>();
@@ -48,7 +49,7 @@ class ProductDetailPage extends StatelessWidget {
     return ProducDetail(
       imageUrl: imageUrl,
       title: title,
-      subtitle: subtitle,
+      subtitle: subtitle.toUpperCase(),
       description: description,
       rating: rating,
       reviewCount: reviewCount,
@@ -166,9 +167,13 @@ class ProducDetail extends StatelessWidget {
                         style: AppTextStyles.urbanist14600TextGrey,
                       ),
                       const SizedBox(height: 8),
-                      Text(
-                        description,
-                        style: AppTextStyles.urbanist14600TextGrey,
+                      AnimatedSize(
+                        duration: const Duration(milliseconds: 300),
+                        child: ExpandableText(
+                          text: description,
+                          style: AppTextStyles.urbanist14600TextGrey,
+                          maxLines: 2,
+                        ),
                       ),
                       const SizedBox(height: 8),
                       Row(
