@@ -96,14 +96,15 @@ flutter_fake_store/
 │   ├── core/                 # Core utilities, constants, routing, theme, extensions
 │   ├── data/                 # Data layer
 │   │   ├── models/           # Data models (e.g., Product, CartItem)
-│   │   ├── network/          # API client, network-related code
+│   │   ├── api/              # API client, network-related code
+|   |   |-- cache/            # Cache-related code
 │   │   └── repositories/     # Repository implementations
 │   ├── presentation/         # Presentation layer (UI and BLoCs)
 │   │   ├── blocs/            # BLoC classes
 │   │   ├── pages/            # Screen/Page widgets
 │   │   └── widgets/          # Reusable UI components
 │   ├── main.dart             # Main application entry point
-│   └── injection.dart        # Dependency injection setup
+│   └── injection/            # Dependency injection setup
 ├── test/                     # Unit and widget tests
 └── ...                       # Other project files (android, ios, pubspec.yaml, etc.)
 ```
