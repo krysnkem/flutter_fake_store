@@ -22,6 +22,8 @@ extension ContextTextExtensions on BuildContext {
   String get review => 'Review';
   String get price => 'Price';
   String get addToCart => 'Add to cart';
+  String get removeFromCart => 'Remove from cart';
+  String get addToWishlist => 'Add to cart';
   String get cart => 'Cart';
   String get logOut => 'Log out';
   String get cartTotal => 'Cart Total';

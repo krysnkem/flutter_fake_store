@@ -21,8 +21,20 @@ import 'package:flutter_fake_store/presentation/widgets/products/product_list_it
 import 'package:flutter_fake_store/presentation/widgets/products/products_error_display.dart';
 import 'package:go_router/go_router.dart';
 
-class ProductsPage extends StatelessWidget {
+class ProductsPage extends StatefulWidget {
   const ProductsPage({super.key});
+
+  @override
+  State<ProductsPage> createState() => _ProductsPageState();
+}
+
+class _ProductsPageState extends State<ProductsPage> {
+  @override
+  void initState() {
+    super.initState();
+
+    context.read<ProductsBloc>().add(const GetAllProducts());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -162,7 +174,12 @@ class ProductsPage extends StatelessWidget {
                         ],
                       );
                     case ProductsError(message: final msg):
-                      return ProductsErrorDisplay(message: 'Error: $msg');
+                      return ProductsErrorDisplay(
+                        message: 'Error: $msg',
+                        refresh: () async => context
+                            .read<ProductsBloc>()
+                            .add(const GetAllProducts()),
+                      );
                   }
                 },
               )

@@ -15,6 +15,7 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
   ProductsBloc(this._dataRepository) : super(ProductsInitial()) {
     on<GetAllProducts>(_getAllProducts);
     on<GetMoreProducts>(_onGetMoreProducts);
+    on<ResetProducts>(_onResetProducts);
   }
 
   FutureOr<void> _getAllProducts(
@@ -63,5 +64,10 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
       emit(ProductsError(message: e.toString()));
       log('Error geting more products: $e');
     }
+  }
+
+  FutureOr<void> _onResetProducts(
+      ResetProducts event, Emitter<ProductsState> emit) {
+    emit(ProductsInitial());
   }
 }

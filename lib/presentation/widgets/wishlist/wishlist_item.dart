@@ -16,7 +16,8 @@ class WishListItem extends StatelessWidget {
     required this.isFavorite,
     this.productId,
     this.onAddToWishList,
-    this.onAddToCart,
+    this.onToggleCart,
+    this.isInCart = false,
   });
 
   final String imageUrl;
@@ -25,9 +26,10 @@ class WishListItem extends StatelessWidget {
   final String rating;
   final String price;
   final bool isFavorite;
+  final bool isInCart;
   final String? productId;
   final VoidCallback? onAddToWishList;
-  final VoidCallback? onAddToCart;
+  final VoidCallback? onToggleCart;
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +108,7 @@ class WishListItem extends StatelessWidget {
                   Material(
                     color: Colors.transparent,
                     child: InkWell(
-                      onTap: () => onAddToCart?.call(),
+                      onTap: () => onToggleCart?.call(),
                       child: Ink(
                         width: double.infinity,
                         padding: const EdgeInsets.symmetric(
@@ -118,7 +120,9 @@ class WishListItem extends StatelessWidget {
                         ),
                         child: Center(
                           child: Text(
-                            context.addToCart,
+                            isInCart
+                                ? context.removeFromCart
+                                : context.addToCart,
                             style: AppTextStyles.urbanist14600PureBlack,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,

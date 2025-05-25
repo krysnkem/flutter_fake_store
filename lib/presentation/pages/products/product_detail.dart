@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_fake_store/core/constants/image_constants.dart';
 import 'package:flutter_fake_store/core/utils/extensions/context_extensions.dart';
 import 'package:flutter_fake_store/core/utils/theme/app_colors.dart';
 import 'package:flutter_fake_store/core/utils/theme/app_text_styles.dart';
 import 'package:flutter_fake_store/data/models/product/product.dart';
-import 'package:flutter_fake_store/presentation/blocs/wishlist/wishlist_bloc.dart';
-import 'package:flutter_fake_store/presentation/blocs/wishlist/wishlist_event.dart';
-import 'package:flutter_fake_store/presentation/blocs/wishlist/wishlist_state.dart';
+import 'package:flutter_fake_store/presentation/utils/cart_interaction_utils.dart';
+import 'package:flutter_fake_store/presentation/utils/wishlist_interaction_utils.dart';
 import 'package:flutter_fake_store/presentation/widgets/expandable_text.dart';
 import 'package:flutter_fake_store/presentation/widgets/favourites_icon_button.dart';
 
@@ -24,28 +22,13 @@ class ProductDetailPage extends StatelessWidget {
     final String subtitle = product?.category ?? 'Product Subtitle';
     final String description = product?.description ?? 'Product Subtitle';
     final String price = '\$${product?.price.toStringAsFixed(2) ?? '0.00'}';
-    final int reviewCount = product?.rating.count ?? 100;
+    final int reviewCount = product?.rating.count ?? 0;
     final rating = product?.rating.rate.toStringAsFixed(2) ?? '0.00';
 
-    final wishlistProductIds = <int>[];
-    final wishlistBloc = context.watch<WishlistBloc>();
-    final wishlistState = wishlistBloc.state;
-    if (wishlistState is WishlistLoaded) {
-      wishlistProductIds.addAll(wishlistState.productIds);
-    } else if (wishlistState is WislistUpdateError) {
-      wishlistProductIds.addAll(wishlistState.productIds);
-    }
+    final wishlistDetails = context.getWishlistInteractionDetails(product);
 
-    final onToggleWishlist = wishlistState is WishlistLoading
-        ? null
-        : (Product product) {
-            if (wishlistProductIds.contains(product.id)) {
-              wishlistBloc.add(WishlistProductRemoved(product.id));
-            } else {
-              wishlistBloc.add(WishlistProductAdded(product.id));
-            }
-          };
-
+    final cartDetails =
+        product == null ? null : context.getCartInteractionDetails(product!);
     return ProducDetail(
       imageUrl: imageUrl,
       title: title,
@@ -54,25 +37,30 @@ class ProductDetailPage extends StatelessWidget {
       rating: rating,
       reviewCount: reviewCount,
       price: price,
-      isFavourite: wishlistProductIds.contains(product?.id),
-      onToggleWishlist: () => onToggleWishlist?.call(product!),
+      isFavourite: wishlistDetails.isFavourite,
+      onToggleWishlist: wishlistDetails.onToggleWishlist,
+      isInCart: cartDetails?.isInCart ?? false,
+      onAddToCart: () => cartDetails?.onAddToCart?.call(),
+      onRemoveFromCart: () => cartDetails?.onRemoveFromCart?.call(),
     );
   }
 }
 
 class ProducDetail extends StatelessWidget {
-  const ProducDetail({
-    super.key,
-    required this.imageUrl,
-    required this.title,
-    required this.subtitle,
-    required this.rating,
-    required this.reviewCount,
-    required this.price,
-    required this.description,
-    this.onToggleWishlist,
-    required this.isFavourite,
-  });
+  const ProducDetail(
+      {super.key,
+      required this.imageUrl,
+      required this.title,
+      required this.subtitle,
+      required this.rating,
+      required this.reviewCount,
+      required this.price,
+      required this.description,
+      this.onToggleWishlist,
+      required this.isFavourite,
+      this.isInCart = true,
+      this.onAddToCart,
+      this.onRemoveFromCart});
 
   final String imageUrl;
   final String title;
@@ -82,8 +70,10 @@ class ProducDetail extends StatelessWidget {
   final String price;
   final String description;
   final bool isFavourite;
+  final bool isInCart;
   final VoidCallback? onToggleWishlist;
-
+  final VoidCallback? onAddToCart;
+  final VoidCallback? onRemoveFromCart;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -223,10 +213,24 @@ class ProducDetail extends StatelessWidget {
                       const SizedBox(width: 24),
                       Expanded(
                         flex: 2,
-                        child: ElevatedButton(
-                          onPressed: () {},
-                          child: Text(context.addToCart),
-                        ),
+                        child: Builder(builder: (context) {
+                          if (isInCart) {
+                            return OutlinedButton(
+                              onPressed: onRemoveFromCart,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.pureWhite,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                              ),
+                              child: Text(context.removeFromCart),
+                            );
+                          }
+                          return ElevatedButton(
+                            onPressed: onAddToCart,
+                            child: Text(context.addToCart),
+                          );
+                        }),
                       ),
                     ],
                   ),

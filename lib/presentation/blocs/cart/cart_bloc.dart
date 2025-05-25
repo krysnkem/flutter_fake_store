@@ -17,6 +17,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     on<CartItemUpdated>(_onCartItemUpdated);
     on<GetCartItems>(_onGetCartItems);
     on<CarItemRemoved>(_onCarItemRemoved);
+    on<ResetCartItems>(_onResetCart);
   }
 
   void _onCarItemRemoved(CarItemRemoved event, Emitter<CartState> emit) async {
@@ -68,6 +69,9 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     List<CartItem> cartItems = [];
     List<CartItem> oldCartItems = [];
 
+    if (event.cartItem.quantity <= 0) {
+      return;
+    }
     if (state is CartItemsLoaded) {
       cartItems = (List<CartItem>.from((state as CartItemsLoaded).items));
       oldCartItems = (List<CartItem>.from((state as CartItemsLoaded).items));
@@ -136,5 +140,9 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       log('Error getting Cart Items $e \n $stackTrace');
       emit(CartItemsError(e.toString()));
     }
+  }
+
+  FutureOr<void> _onResetCart(ResetCartItems event, Emitter<CartState> emit) {
+    emit(CartStateInitial());
   }
 }

@@ -99,6 +99,15 @@ class AppTheme {
         padding: const EdgeInsets.symmetric(vertical: 14),
       ),
     );
+    var outlinedButtonThemeData = OutlinedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AppColors.pureWhite,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(6),
+        ),
+        padding: const EdgeInsets.symmetric(vertical: 14),
+      ),
+    );
     var inputDecorationTheme = InputDecorationTheme(
       // Field text style
       labelStyle: AppTextStyles.urbanist14600TextGrey,
@@ -162,6 +171,7 @@ class AppTheme {
       scaffoldBackgroundColor: AppColors.pureWhite,
       appBarTheme: appBarTheme,
       elevatedButtonTheme: elevatedButtonThemeData,
+      outlinedButtonTheme: outlinedButtonThemeData,
       inputDecorationTheme: inputDecorationTheme,
       colorScheme: const ColorScheme.light(
         primary: AppColors.buttonBlack, // Or any color you prefer

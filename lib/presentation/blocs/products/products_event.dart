@@ -19,9 +19,6 @@ final class GetMoreProducts extends ProductsEvent {
   List<Object> get props => [];
 }
 
-final class GetProductDetailsEvent extends ProductsEvent {
-  final int id;
-  const GetProductDetailsEvent(this.id);
-  @override
-  List<Object> get props => [id];
+final class ResetProducts extends ProductsEvent {
+  const ResetProducts();
 }

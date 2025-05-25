@@ -14,6 +14,7 @@ class WishlistBloc extends Bloc<WishlistEvent, WishlistState> {
     on<GetWishlist>(_getWishlist);
     on<WishlistProductAdded>(_wishlistProductAdded);
     on<WishlistProductRemoved>(_wishlistProductRemoved);
+    on<ResetWishlist>(_resetWishlist);
   }
 
   final DataRepository _dataRepository;
@@ -42,7 +43,10 @@ class WishlistBloc extends Bloc<WishlistEvent, WishlistState> {
 
   FutureOr<void> _wishlistProductAdded(
       WishlistProductAdded event, Emitter<WishlistState> emit) async {
-    if (state is! WishlistLoaded && state is! WislistUpdateError) {
+    log(state.toString());
+    if (state is! WishlistLoaded &&
+        state is! WislistUpdateError &&
+        state is! WishlistInitial) {
       return;
     }
 
@@ -57,6 +61,9 @@ class WishlistBloc extends Bloc<WishlistEvent, WishlistState> {
         }
         originalIds = Set<int>.from(productIds); // Create new copy
         updatedIds = Set<int>.from(productIds)..add(event.productId); // NEW Set
+        break;
+      case WishlistInitial():
+        updatedIds.add(event.productId);
         break;
       default:
         return;
@@ -85,7 +92,9 @@ class WishlistBloc extends Bloc<WishlistEvent, WishlistState> {
     Set<int> updatedIds = {};
     Set<int> originalIds = {};
 
-    if (state is! WishlistLoaded && state is! WislistUpdateError) {
+    if (state is! WishlistLoaded &&
+        state is! WislistUpdateError &&
+        state is! WishlistInitial) {
       return;
     }
     switch (state) {
@@ -115,5 +124,12 @@ class WishlistBloc extends Bloc<WishlistEvent, WishlistState> {
         ),
       );
     }
+  }
+
+  FutureOr<void> _resetWishlist(
+      ResetWishlist event, Emitter<WishlistState> emit) {
+    emit(
+      WishlistInitial(),
+    );
   }
 }

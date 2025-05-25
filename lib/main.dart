@@ -17,9 +17,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final sharedPreferences = await SharedPreferences.getInstance();
   getIt.registerSingleton<SharedPreferences>(sharedPreferences);
-
-  configureDependencies(); // Or getIt.init(), or whatever your setup function is named
-
+  configureDependencies();
   runApp(const MyApp());
 }
 

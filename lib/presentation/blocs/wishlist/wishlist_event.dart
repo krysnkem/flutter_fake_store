@@ -11,6 +11,10 @@ final class GetWishlist extends WishlistEvent {
   const GetWishlist();
 }
 
+final class ResetWishlist extends WishlistEvent {
+  const ResetWishlist();
+}
+
 final class WishlistProductAdded extends WishlistEvent {
   const WishlistProductAdded(this.productId);
 

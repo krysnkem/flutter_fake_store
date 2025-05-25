@@ -6,9 +6,8 @@ import 'package:flutter_fake_store/core/utils/theme/app_text_styles.dart';
 import 'package:flutter_fake_store/data/models/product/product.dart';
 import 'package:flutter_fake_store/presentation/blocs/products/products_bloc.dart';
 import 'package:flutter_fake_store/presentation/blocs/products/products_state.dart';
-import 'package:flutter_fake_store/presentation/blocs/wishlist/wishlist_bloc.dart';
-import 'package:flutter_fake_store/presentation/blocs/wishlist/wishlist_event.dart';
-import 'package:flutter_fake_store/presentation/blocs/wishlist/wishlist_state.dart';
+import 'package:flutter_fake_store/presentation/utils/cart_interaction_utils.dart';
+import 'package:flutter_fake_store/presentation/utils/wishlist_input_utlis.dart';
 import 'package:flutter_fake_store/presentation/widgets/logout_icon_button.dart';
 import 'package:flutter_fake_store/presentation/widgets/page_spacing.dart';
 import 'package:flutter_fake_store/presentation/widgets/products/loading_products.dart';
@@ -42,63 +41,25 @@ class WishlistPage extends StatelessWidget {
               ),
               BlocBuilder<ProductsBloc, ProductsState>(
                 builder: (context, state) {
-                  final wishlistProductIds = <int>{};
-                  final wishlistBloc = context.watch<WishlistBloc>();
-                  final wishlistState = wishlistBloc.state;
-                  final prods = <Product>{};
-
-                  final productsBloc = context.watch<ProductsBloc>();
-                  final productsState = productsBloc.state;
-
-                  if (wishlistState is WishlistLoading ||
-                      productsState is ProductsLoadingAllProducts ||
-                      productsState is ProductsInitial) {
+                  final wishlistScreenInput = context.getWishListScreenInput();
+                  final wishListProducts = wishlistScreenInput.wishlist;
+                  final wishlistProductIds =
+                      wishlistScreenInput.wishListProductIDs;
+                  if (wishlistScreenInput.isLoading) {
                     return const LoadingProducts();
                   }
-                  if (wishlistState is WishlistLoaded) {
-                    wishlistProductIds.addAll(wishlistState.productIds);
-                  } else if (wishlistState is WislistUpdateError) {
-                    wishlistProductIds.addAll(wishlistState.productIds);
-                  }
-
-                  final onToggleWishlist = wishlistState is WishlistLoading
-                      ? null
-                      : (Product product) {
-                          if (wishlistProductIds.contains(product.id)) {
-                            wishlistBloc
-                                .add(WishlistProductRemoved(product.id));
-                          } else {
-                            wishlistBloc.add(WishlistProductAdded(product.id));
-                          }
-                        };
-
-                  switch (productsState) {
-                    case ProductsLoaded(:final products):
-                    case ProductsLoadingMoreProducts(:final products):
-                    case MoreProductsError(:final products):
-                      prods.addAll(
-                        products.where(
-                          (product) => wishlistProductIds.any(
-                            (id) => id == (product.id),
-                          ),
-                        ),
-                      );
-                      break;
-                    default:
-                  }
-
-                  if (prods.isEmpty) {
+                  if (wishListProducts.isEmpty) {
                     return const NoProductsFound();
                   }
                   return WishListSection(
-                    products: prods.toList(),
+                    products: wishListProducts.toList(),
                     onTap: (product) => context.push(
                       AppRoutes.getProduct(
                         product.id.toString(),
                       ),
                     ),
                     wishListProductIds: wishlistProductIds.toList(),
-                    onAddToWishList: onToggleWishlist,
+                    onAddToWishList: wishlistScreenInput.onToggleWishlist,
                   );
                 },
               ),
@@ -160,6 +121,8 @@ class _WishListSectionState extends State<WishListSection> {
           final rating = product.rating.rate.toStringAsFixed(2);
           var price = product.price.toStringAsFixed(2);
           final isFavorite = widget.wishListProductIds.contains(product.id);
+          final cartInteractions = context.getCartInteractionDetails(product);
+          final isInCart = cartInteractions.isInCart;
           return InkWell(
             onTap: () => widget.onTap?.call(product),
             child: WishListItem(
@@ -171,7 +134,10 @@ class _WishListSectionState extends State<WishListSection> {
               price: price,
               isFavorite: isFavorite,
               onAddToWishList: () => widget.onAddToWishList?.call(product),
-              onAddToCart: () => widget.onAddToCart?.call(product),
+              onToggleCart: isInCart
+                  ? cartInteractions.onRemoveFromCart
+                  : cartInteractions.onAddToCart,
+              isInCart: isInCart,
             ),
           );
         },

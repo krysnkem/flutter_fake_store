@@ -13,9 +13,11 @@ class CartListItem extends StatelessWidget {
     required this.category,
     required this.rating,
     required this.price,
-    required this.isFavorite,
     this.productId,
     this.onDelete,
+    this.onIncrease,
+    this.onReduce,
+    this.quantity = 0,
   });
 
   final String imageUrl;
@@ -23,9 +25,11 @@ class CartListItem extends StatelessWidget {
   final String category;
   final String rating;
   final String price;
-  final bool isFavorite;
+  final int quantity;
   final String? productId;
   final VoidCallback? onDelete;
+  final VoidCallback? onIncrease;
+  final VoidCallback? onReduce;
 
   @override
   Widget build(BuildContext context) {
@@ -42,11 +46,7 @@ class CartListItem extends StatelessWidget {
             extentRatio: 0.25,
             children: [
               CustomSlidableAction(
-                onPressed: (context) {
-                  // Remove the notification
-                  showDeleteDialog(context);
-                  // Show undo SnackBar
-                },
+                onPressed: (context) => onDelete?.call(),
                 backgroundColor: AppColors.deleteRed,
                 child: const Icon(
                   Icons.delete_outline,
@@ -120,16 +120,16 @@ class CartListItem extends StatelessWidget {
                               topLeft: Radius.circular(6),
                               bottomLeft: Radius.circular(6),
                             ),
-                            onTap: () {}, // Add your logic here
+                            onTap: onReduce, // Add your logic here
                           ),
-                          _quantityDisplay('1'),
+                          _quantityDisplay('$quantity'),
                           _quantityButton(
                             icon: Icons.add_circle_outline,
                             borderRadius: const BorderRadius.only(
                               topRight: Radius.circular(6),
                               bottomRight: Radius.circular(6),
                             ),
-                            onTap: () {}, // Add your logic here
+                            onTap: onIncrease, // Add your logic here
                           ),
                         ],
                       )

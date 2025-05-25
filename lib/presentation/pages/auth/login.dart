@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_fake_store/core/routing/app_routes.dart';
@@ -85,6 +87,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   },
                   listener: (BuildContext context, AuthState state) {
                     if (state is AuthAuthenticatedState) {
+                      log("AuthAuthenticatedState detected. Fetching data for BLoCs for user: ${state.username}"); // ADD THIS LOG
+                     
+
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text(context.loginSuccess)),
                       );

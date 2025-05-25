@@ -3,12 +3,15 @@ import 'package:flutter_fake_store/data/models/cart/cart_item.dart';
 
 sealed class CartEvent extends Equatable {
   const CartEvent();
+  @override
+  List<Object?> get props => [];
 }
 
 final class GetCartItems extends CartEvent {
   const GetCartItems();
-  @override
-  List<Object?> get props => [];
+}
+final class ResetCartItems extends CartEvent {
+  const ResetCartItems();
 }
 
 final class CartItemUpdated extends CartEvent {
