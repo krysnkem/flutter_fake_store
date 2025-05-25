@@ -43,13 +43,6 @@ class WishlistBloc extends Bloc<WishlistEvent, WishlistState> {
 
   FutureOr<void> _wishlistProductAdded(
       WishlistProductAdded event, Emitter<WishlistState> emit) async {
-    log(state.toString());
-    if (state is! WishlistLoaded &&
-        state is! WislistUpdateError &&
-        state is! WishlistInitial) {
-      return;
-    }
-
     Set<int> originalIds = {};
     Set<int> updatedIds = {};
 
@@ -92,11 +85,6 @@ class WishlistBloc extends Bloc<WishlistEvent, WishlistState> {
     Set<int> updatedIds = {};
     Set<int> originalIds = {};
 
-    if (state is! WishlistLoaded &&
-        state is! WislistUpdateError &&
-        state is! WishlistInitial) {
-      return;
-    }
     switch (state) {
       case WishlistLoaded(:final productIds):
       case WislistUpdateError(:final productIds):
