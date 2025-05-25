@@ -33,76 +33,79 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: PageSpacing(
-        child: Form(
-          autovalidateMode: AutovalidateMode.onUnfocus,
-          child: Column(
-            children: [
-              Text(
-                context.welcomeBack,
-                style: AppTextStyles.urbanist30700DarkNavy,
-              ),
-              SizedBox(
-                height: context.height(32),
-              ), // Add some spacing
-              TextFormField(
-                controller: usernameController,
-                decoration: InputDecoration(
-                  hintText: context.enterYourUsername,
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        appBar: AppBar(),
+        body: PageSpacing(
+          child: Form(
+            autovalidateMode: AutovalidateMode.onUnfocus,
+            child: Column(
+              children: [
+                Text(
+                  context.welcomeBack,
+                  style: AppTextStyles.urbanist30700DarkNavy,
                 ),
-                validator: FormValidators.validateUsername,
-              ),
-              SizedBox(
-                height: context.height(16),
-              ),
-              PasswordFormField(
-                controller: passwordController,
-              ),
-              SizedBox(
-                height: context.height(32),
-              ),
-              BlocConsumer<AuthBloc, AuthState>(
-                builder: (context, state) {
-                  return CustomButton(
-                    isLoading: state is AuthLoadingState,
-                    onPressed: () {
-                      if (Form.of(context).validate()) {
-                        // Trigger login event
-                        context.read<AuthBloc>().add(
-                              AuthLoginEvent(
-                                username: username,
-                                password: passwordController.text,
-                              ),
-                            );
-                      }
-                    },
-                    text: context.login,
-                  );
-                },
-                listener: (BuildContext context, AuthState state) {
-                  if (state is AuthAuthenticatedState) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(context.loginSuccess)),
+                SizedBox(
+                  height: context.height(32),
+                ), // Add some spacing
+                TextFormField(
+                  controller: usernameController,
+                  decoration: InputDecoration(
+                    hintText: context.enterYourUsername,
+                  ),
+                  validator: FormValidators.validateUsername,
+                ),
+                SizedBox(
+                  height: context.height(16),
+                ),
+                PasswordFormField(
+                  controller: passwordController,
+                ),
+                SizedBox(
+                  height: context.height(32),
+                ),
+                BlocConsumer<AuthBloc, AuthState>(
+                  builder: (context, state) {
+                    return CustomButton(
+                      isLoading: state is AuthLoadingState,
+                      onPressed: () {
+                        if (Form.of(context).validate()) {
+                          // Trigger login event
+                          context.read<AuthBloc>().add(
+                                AuthLoginEvent(
+                                  username: username,
+                                  password: passwordController.text,
+                                ),
+                              );
+                        }
+                      },
+                      text: context.login,
                     );
-                    context.go(AppRoutes.home);
-                  } else if (state is AuthErrorState) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(state.message),
-                      ),
-                    );
-                  } else if (state is AuthUnauthenticatedState) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(state.message ?? context.loginError),
-                      ),
-                    );
-                  }
-                },
-              ),
-            ],
+                  },
+                  listener: (BuildContext context, AuthState state) {
+                    if (state is AuthAuthenticatedState) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(context.loginSuccess)),
+                      );
+                      context.go(AppRoutes.home);
+                    } else if (state is AuthErrorState) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(state.message),
+                        ),
+                      );
+                    } else if (state is AuthUnauthenticatedState) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(state.message ?? context.loginError),
+                        ),
+                      );
+                    }
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),

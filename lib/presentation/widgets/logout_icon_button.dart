@@ -15,14 +15,15 @@ class LogoutIconButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final authBloc = context.read<AuthBloc>();
 
-    return LogoutIconWidget(onLogout: () async {
-      final shouldLogout = await Dialogs.showLogout(context);
-      if (shouldLogout) {
-        authBloc.add(const AuthLogoutEvent());
-        // Call the onLogout callback if provided by the parent widget
-        onLogout?.call();
-      }
-    });
+    return LogoutIconWidget(
+      onLogout: () async {
+        final shouldLogout = await Dialogs.showLogout(context);
+        if (shouldLogout) {
+          authBloc.add(const AuthLogoutEvent());
+          onLogout?.call();
+        }
+      },
+    );
   }
 }
 
@@ -38,8 +39,6 @@ class LogoutIconWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       onPressed: () {
-        //start log out process
-        //finish log out process
         onLogout?.call();
       },
       icon: Column(
