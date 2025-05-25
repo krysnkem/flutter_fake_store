@@ -20,6 +20,7 @@ import '../data/cache/shared_preference_cache_impl.dart' as _i704;
 import '../data/repositories/data_repository.dart' as _i724;
 import '../data/repositories/data_repository_impl.dart' as _i377;
 import '../presentation/blocs/auth/auth_bloc.dart' as _i525;
+import '../presentation/blocs/products/products_bloc.dart' as _i613;
 import 'register_module.dart' as _i291;
 
 extension GetItInjectableX on _i174.GetIt {
@@ -43,6 +44,8 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i217.ApiClient>(),
           gh<_i208.CacheService>(),
         ));
+    gh.singleton<_i613.ProductsBloc>(
+        () => _i613.ProductsBloc(gh<_i724.DataRepository>()));
     gh.singleton<_i525.AuthBloc>(
         () => _i525.AuthBloc(dataRepository: gh<_i724.DataRepository>()));
     return this;

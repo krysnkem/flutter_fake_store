@@ -5,6 +5,8 @@ import 'package:flutter_fake_store/core/utils/theme/app_theme.dart';
 import 'package:flutter_fake_store/injection/injection.dart';
 import 'package:flutter_fake_store/presentation/blocs/auth/auth_bloc.dart';
 import 'package:flutter_fake_store/presentation/blocs/auth/auth_event.dart';
+import 'package:flutter_fake_store/presentation/blocs/products/products_bloc.dart';
+import 'package:flutter_fake_store/presentation/blocs/products/products_event.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
@@ -27,6 +29,11 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) => getIt<AuthBloc>()..add(const AuthCheckEvent()),
+          lazy: true,
+        ),
+        BlocProvider(
+          create: (context) =>
+              getIt<ProductsBloc>()..add(const GetAllProducts()),
           lazy: true,
         ),
       ],
