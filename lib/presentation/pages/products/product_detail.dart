@@ -4,20 +4,57 @@ import 'package:flutter_fake_store/core/constants/image_constants.dart';
 import 'package:flutter_fake_store/core/utils/extensions/context_extensions.dart';
 import 'package:flutter_fake_store/core/utils/theme/app_colors.dart';
 import 'package:flutter_fake_store/core/utils/theme/app_text_styles.dart';
+import 'package:flutter_fake_store/data/models/product/product.dart';
 import 'package:flutter_fake_store/presentation/widgets/favourites_icon_button.dart';
 
 class ProductDetailPage extends StatelessWidget {
-  const ProductDetailPage({super.key});
+  const ProductDetailPage({super.key, this.product});
+
+  final Product? product;
 
   @override
   Widget build(BuildContext context) {
-    const String imageUrl = PNGS.branding;
-    const String title = 'Product Title';
-    const String subtitle = 'Product Subtitle';
-    const String price = '\$99.99';
-    const int reviewCount = 100;
-    const rating = '4.5';
+    final String imageUrl = product?.image ?? PNGS.branding;
+    final String title = product?.title ?? 'Product Title';
+    final String subtitle = product?.category ?? 'Product Subtitle';
+    final String description = product?.description ?? 'Product Subtitle';
+    final String price = '\$${product?.price.toStringAsFixed(2) ?? '0.00'}';
+    final int reviewCount = product?.rating.count ?? 100;
+    final rating = '\$${product?.rating.rate.toStringAsFixed(2) ?? '0.00'}';
 
+    return ProducDetail(
+        imageUrl: imageUrl,
+        title: title,
+        subtitle: subtitle,
+        description: description,
+        rating: rating,
+        reviewCount: reviewCount,
+        price: price);
+  }
+}
+
+class ProducDetail extends StatelessWidget {
+  const ProducDetail({
+    super.key,
+    required this.imageUrl,
+    required this.title,
+    required this.subtitle,
+    required this.rating,
+    required this.reviewCount,
+    required this.price,
+    required this.description,
+  });
+
+  final String imageUrl;
+  final String title;
+  final String subtitle;
+  final String rating;
+  final int reviewCount;
+  final String price;
+  final String description;
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.lightBackground,
       appBar: AppBar(
@@ -88,13 +125,18 @@ class ProductDetailPage extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
+                      Text(
                         title,
                         style: AppTextStyles.urbanist24600TextGrey75,
                       ),
                       const SizedBox(height: 8),
-                      const Text(
+                      Text(
                         subtitle,
+                        style: AppTextStyles.urbanist14600TextGrey,
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        description,
                         style: AppTextStyles.urbanist14600TextGrey,
                       ),
                       const SizedBox(height: 8),
@@ -105,7 +147,7 @@ class ProductDetailPage extends StatelessWidget {
                             size: 16,
                           ),
                           const SizedBox(width: 4),
-                          const Text(
+                          Text(
                             rating,
                             style: AppTextStyles.urbanist14600DarkCharcoal,
                           ),
@@ -136,7 +178,7 @@ class ProductDetailPage extends StatelessWidget {
                             context.price,
                             style: AppTextStyles.urbanist12600TextGrey75,
                           ),
-                          const Text(
+                          Text(
                             price,
                             style: AppTextStyles.lora20600TextGrey80,
                           ),

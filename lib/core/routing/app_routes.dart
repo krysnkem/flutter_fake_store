@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_fake_store/data/models/product/product.dart';
+import 'package:flutter_fake_store/presentation/blocs/products/products_bloc.dart';
+import 'package:flutter_fake_store/presentation/blocs/products/products_state.dart';
 import 'package:flutter_fake_store/presentation/pages/auth/login.dart';
 import 'package:flutter_fake_store/presentation/pages/auth/splash.dart';
 import 'package:flutter_fake_store/presentation/pages/cart/cart.dart';
@@ -61,7 +65,30 @@ class AppRoutes {
       ),
       GoRoute(
         path: _productDetail,
-        builder: (context, state) => const ProductDetailPage(),
+        builder: (context, state) {
+          Product? product;
+          final data = state.pathParameters['id'];
+          if (data != null) {
+            final productId = int.parse(data);
+            final productBlocState = context.read<ProductsBloc>().state;
+            List<Product> products = [];
+            if (productBlocState is ProductsLoaded) {
+              products.addAll((productBlocState).products);
+            } else if (productBlocState is ProductsLoadingMoreProducts) {
+              products.addAll((productBlocState).products);
+            } else if (productBlocState is MoreProductsError) {
+              products.addAll((productBlocState).products);
+            }
+            try {
+              product = products.firstWhere(
+                (element) => element.id == productId,
+              );
+            } catch (e) {}
+          }
+          return ProductDetailPage(
+            product: product,
+          );
+        },
       ),
     ],
   );

@@ -74,6 +74,7 @@ class ProductsPage extends StatelessWidget {
 
               BlocBuilder<ProductsBloc, ProductsState>(
                 builder: (context, state) {
+                  final wishlistProductIds = <String>[];
                   switch (state) {
                     case ProductsInitial():
                     case ProductsLoadingAllProducts():
@@ -92,6 +93,7 @@ class ProductsPage extends StatelessWidget {
                             product.id.toString(),
                           ),
                         ),
+                      wishListProductIds: wishlistProductIds,
                       );
                     case ProductsLoadingMoreProducts(
                         products: final prods,
@@ -107,6 +109,7 @@ class ProductsPage extends StatelessWidget {
                             product.id.toString(),
                           ),
                         ),
+                        wishListProductIds: wishlistProductIds,
                       );
                     case MoreProductsError(
                         products: final prods,
@@ -127,6 +130,7 @@ class ProductsPage extends StatelessWidget {
                                   product.id.toString(),
                                 ),
                               ),
+                              wishListProductIds: wishlistProductIds,
                             ),
                           ),
                           FailedToLoadMore(msg: msg),
@@ -152,12 +156,16 @@ class ProductListSection extends StatefulWidget {
     this.isLoadingMore = false,
     this.onRefresh,
     this.onTap,
+    this.onAddToWishList,
+    this.wishListProductIds = const [],
   });
 
   final List<Product> products;
   final bool isLoadingMore;
   final Future Function()? onRefresh;
   final void Function(Product product)? onTap;
+  final void Function(Product product)? onAddToWishList;
+  final List<String> wishListProductIds;
 
   @override
   State<ProductListSection> createState() => _ProductListSectionState();
@@ -210,7 +218,8 @@ class _ProductListSectionState extends State<ProductListSection> {
             final category = product.category;
             final rating = product.rating.rate.toStringAsFixed(2);
             var price = product.price.toStringAsFixed(2);
-            const isFavorite = true;
+            final isFavorite =
+                widget.wishListProductIds.contains(product.id.toString());
             return InkWell(
               onTap: () => widget.onTap?.call(product),
               child: ProductListItem(
@@ -221,6 +230,7 @@ class _ProductListSectionState extends State<ProductListSection> {
                 rating: rating,
                 price: price,
                 isFavorite: isFavorite,
+                onAddToWishList: () => widget.onAddToWishList?.call(product),
               ),
             );
           },

@@ -5,16 +5,16 @@ import 'package:flutter_fake_store/core/utils/theme/app_text_styles.dart';
 import 'package:flutter_fake_store/presentation/widgets/favourites_icon_button.dart';
 
 class ProductListItem extends StatelessWidget {
-  const ProductListItem({
-    super.key,
-    required this.imageUrl,
-    required this.title,
-    required this.category,
-    required this.rating,
-    required this.price,
-    required this.isFavorite,
-    this.productId,
-  });
+  const ProductListItem(
+      {super.key,
+      required this.imageUrl,
+      required this.title,
+      required this.category,
+      required this.rating,
+      required this.price,
+      required this.isFavorite,
+      this.productId,
+      this.onAddToWishList});
 
   final String imageUrl;
   final String title;
@@ -23,6 +23,7 @@ class ProductListItem extends StatelessWidget {
   final String price;
   final bool isFavorite;
   final String? productId;
+  final VoidCallback? onAddToWishList;
 
   @override
   Widget build(BuildContext context) {
@@ -126,14 +127,16 @@ class ProductListItem extends StatelessWidget {
               ),
             ),
           ),
-
           const SizedBox(width: 12),
-
           // Column 3: Icon
           Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              FavouritesIconButton(isFavorite: isFavorite),
+              FavouritesIconButton(
+                isFavorite: isFavorite,
+                onAddToWishList: onAddToWishList,
+                inactiveColor: AppColors.textGrey80,
+              ),
             ],
           ),
         ],

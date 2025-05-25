@@ -6,17 +6,17 @@ class FavouritesIconButton extends StatelessWidget {
     super.key,
     required this.isFavorite,
     this.inactiveColor,
+    this.onAddToWishList,
   });
 
   final bool isFavorite;
   final Color? inactiveColor;
+  final VoidCallback? onAddToWishList;
 
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      onPressed: () {
-        // Handle favorite toggle
-      },
+      onPressed: onAddToWishList,
       padding: EdgeInsets.zero,
       icon: Icon(
         isFavorite ? Icons.favorite : Icons.favorite_border,
