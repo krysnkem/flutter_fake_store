@@ -63,14 +63,14 @@ class DataRepositoryImpl with SafeCall implements DataRepository {
   }
 
   @override
-  Future<Result<void>> addToFavorites(String product) async {
+  Future<Result<void>> addToFavorites(int product) async {
     try {
       final result = await getFavoriteProductIDs();
       if (result is Failure) {
         return result;
       }
-      final items = (result as Success<List<String>>).data;
-      List<String> productIDs = items ?? [];
+      final items = (result as Success<List<int>>).data;
+      List<int> productIDs = items ?? [];
       // Check if product already exists in favorites
       final existingItemIndex = productIDs.indexWhere(
         (item) => item == product,
@@ -128,13 +128,13 @@ class DataRepositoryImpl with SafeCall implements DataRepository {
   }
 
   @override
-  Future<Result<List<String>>> getFavoriteProductIDs() async {
+  Future<Result<List<int>>> getFavoriteProductIDs() async {
     try {
       final favourites = await _cacheService.read(_favoritesKey);
 
-      List<String> products = [];
+      List<int> products = [];
       if (favourites != null) {
-        final productJson = jsonDecode(favourites) as List<String>;
+        final productJson = jsonDecode(favourites) as List<int>;
         products.addAll(productJson);
       }
       return Success(data: products);
@@ -217,14 +217,14 @@ class DataRepositoryImpl with SafeCall implements DataRepository {
   }
 
   @override
-  Future<Result<void>> removeFromFavorites(String productId) async {
+  Future<Result<void>> removeFromFavorites(int productId) async {
     try {
       final result = await getFavoriteProductIDs();
       if (result is Failure) {
         return result;
       }
-      final items = (result as Success<List<String>>).data;
-      List<String> products = items ?? [];
+      final items = (result as Success<List<int>>).data;
+      List<int> products = items ?? [];
       // Check if product already exists in cart
       final existingItemIndex = products.indexWhere(
         (item) => item == productId,

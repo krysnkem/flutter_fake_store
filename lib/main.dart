@@ -7,6 +7,8 @@ import 'package:flutter_fake_store/presentation/blocs/auth/auth_bloc.dart';
 import 'package:flutter_fake_store/presentation/blocs/auth/auth_event.dart';
 import 'package:flutter_fake_store/presentation/blocs/products/products_bloc.dart';
 import 'package:flutter_fake_store/presentation/blocs/products/products_event.dart';
+import 'package:flutter_fake_store/presentation/blocs/wishlist/wishlist_bloc.dart';
+import 'package:flutter_fake_store/presentation/blocs/wishlist/wishlist_event.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
@@ -34,6 +36,10 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) =>
               getIt<ProductsBloc>()..add(const GetAllProducts()),
+          lazy: true,
+        ),
+        BlocProvider(
+          create: (context) => getIt<WishlistBloc>()..add(const GetWishlist()),
           lazy: true,
         ),
       ],

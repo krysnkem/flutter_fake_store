@@ -19,11 +19,11 @@ abstract class DataRepository {
   Future<Result<List<Product>>> getProducts();
 
   // Favorites
-  Future<Result<List<String>>> getFavoriteProductIDs();
+  Future<Result<List<int>>> getFavoriteProductIDs();
 
-  Future<Result<void>> addToFavorites(String productId);
+  Future<Result<void>> addToFavorites(int productId);
 
-  Future<Result<void>> removeFromFavorites(String productId);
+  Future<Result<void>> removeFromFavorites(int productId);
 
   Future<Result<void>> clearFavorites();
 
