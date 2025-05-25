@@ -21,7 +21,6 @@ class WishlistBloc extends Bloc<WishlistEvent, WishlistState> {
 
   FutureOr<void> _getWishlist(
       GetWishlist event, Emitter<WishlistState> emit) async {
-    log('get wishlist');
     emit(WishlistLoading());
     try {
       final result = await _dataRepository.getFavoriteProductIDs();
@@ -29,8 +28,6 @@ class WishlistBloc extends Bloc<WishlistEvent, WishlistState> {
         final wishListProductIds = ((result as Success).data as List<int>);
 
         emit(WishlistLoaded(productIds: wishListProductIds.toSet()));
-        log('Wish list loaded');
-        log('Wish list data $wishListProductIds');
       } else if (result is Failure) {
         emit(WishlistError(message: (result as Failure).message));
         log('Wish list Failure ${(result as Failure).message}');
