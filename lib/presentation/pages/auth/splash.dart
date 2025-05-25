@@ -21,7 +21,11 @@ class Splash extends StatefulWidget {
 class _SplashState extends State<Splash> {
   @override
   void initState() {
-    context.read<AuthBloc>().add(const AuthCheckEvent());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        context.read<AuthBloc>().add(const AuthCheckEvent());
+      }
+    });
     super.initState();
   }
 
@@ -36,8 +40,10 @@ class _SplashState extends State<Splash> {
               fit: BoxFit.cover,
             ),
           ),
-          Align(
-            alignment: Alignment.center,
+          Positioned(
+            top: MediaQuery.sizeOf(context).height * 0.20,
+            left: 0,
+            right: 0,
             child: SafeArea(
               child: PageSpacing(
                 child: Column(

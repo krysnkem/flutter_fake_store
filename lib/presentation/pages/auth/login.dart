@@ -90,6 +90,12 @@ class _LoginScreenState extends State<LoginScreen> {
                         content: Text(state.message),
                       ),
                     );
+                  } else if (state is AuthUnauthenticatedState) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(state.message ?? context.loginError),
+                      ),
+                    );
                   }
                 },
               ),

@@ -36,19 +36,15 @@ extension GetItInjectableX on _i174.GetIt {
     final registerModule = _$RegisterModule();
     gh.lazySingleton<_i361.Dio>(() => registerModule.dio);
     gh.lazySingleton<String>(() => registerModule.baseUrl);
-    gh.lazySingletonAsync<_i460.SharedPreferences>(
-        () => registerModule.sharedPreferences);
-    gh.lazySingletonAsync<_i208.CacheService>(() async =>
-        _i704.SharedPreferenceCacheImpl(
-            await getAsync<_i460.SharedPreferences>()));
-    gh.factory<_i217.ApiClient>(() => _i217.ApiClient(gh<_i361.Dio>()));
-    gh.lazySingletonAsync<_i724.DataRepository>(
-        () async => _i377.DataRepositoryImpl(
-              gh<_i217.ApiClient>(),
-              await getAsync<_i208.CacheService>(),
-            ));
-    gh.factoryAsync<_i525.AuthBloc>(() async =>
-        _i525.AuthBloc(dataRepository: await getAsync<_i724.DataRepository>()));
+    gh.lazySingleton<_i208.CacheService>(
+        () => _i704.SharedPreferenceCacheImpl(gh<_i460.SharedPreferences>()));
+    gh.singleton<_i217.ApiClient>(() => _i217.ApiClient(gh<_i361.Dio>()));
+    gh.lazySingleton<_i724.DataRepository>(() => _i377.DataRepositoryImpl(
+          gh<_i217.ApiClient>(),
+          gh<_i208.CacheService>(),
+        ));
+    gh.singleton<_i525.AuthBloc>(
+        () => _i525.AuthBloc(dataRepository: gh<_i724.DataRepository>()));
     return this;
   }
 }

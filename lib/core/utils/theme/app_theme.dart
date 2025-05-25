@@ -163,6 +163,9 @@ class AppTheme {
       appBarTheme: appBarTheme,
       elevatedButtonTheme: elevatedButtonThemeData,
       inputDecorationTheme: inputDecorationTheme,
+      colorScheme: const ColorScheme.light(
+        primary: AppColors.buttonBlack, // Or any color you prefer
+      ),
 
       navigationBarTheme: const NavigationBarThemeData(
         backgroundColor: Colors.white,

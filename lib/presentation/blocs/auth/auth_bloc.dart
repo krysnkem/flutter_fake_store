@@ -9,7 +9,7 @@ import 'package:flutter_fake_store/presentation/blocs/auth/auth_event.dart';
 import 'package:flutter_fake_store/presentation/blocs/auth/auth_state.dart';
 import 'package:injectable/injectable.dart';
 
-@injectable
+@singleton
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final DataRepository _dataRepository;
 
@@ -34,9 +34,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       } else if (result is Failure) {
         emit(AuthUnauthenticatedState(message: (result as Failure).message));
       }
-    } catch (e) {
+    } catch (e, stacktrace) {
       emit(AuthErrorState(message: e.toString()));
-      log('Login error: $e');
+      log('Login error: $e \n $stacktrace');
     }
   }
 
@@ -50,15 +50,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       } else if (result is Failure) {
         emit(AuthErrorState(message: (result).message));
       }
-    } catch (e) {
+    } catch (e, stacktrace) {
       emit(AuthErrorState(message: e.toString()));
-      log('Logout error: $e');
+      log('Logout error: $e \n $stacktrace');
     }
   }
 
   FutureOr<void> _onCheckAuth(
       AuthCheckEvent event, Emitter<AuthState> emit) async {
     emit(AuthCheckLoadingState());
+    await Future.delayed(const Duration(seconds: 3));
     final result = await _dataRepository.isLoggedIn();
     try {
       if (result is Success) {
@@ -73,9 +74,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       } else if (result is Failure) {
         emit(AuthErrorState(message: (result as Failure).message));
       }
-    } catch (e) {
+    } catch (e, stactrace) {
       emit(AuthErrorState(message: e.toString()));
-      log('Check auth error: $e');
+      log('Check auth error: $e \n $stactrace');
     }
   }
 }

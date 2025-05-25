@@ -4,8 +4,15 @@ import 'package:flutter_fake_store/core/routing/app_routes.dart';
 import 'package:flutter_fake_store/core/utils/theme/app_theme.dart';
 import 'package:flutter_fake_store/injection/injection.dart';
 import 'package:flutter_fake_store/presentation/blocs/auth/auth_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final sharedPreferences = await SharedPreferences.getInstance();
+  getIt.registerSingleton<SharedPreferences>(sharedPreferences);
+
+  configureDependencies(); // Or getIt.init(), or whatever your setup function is named
+
   runApp(const MyApp());
 }
 

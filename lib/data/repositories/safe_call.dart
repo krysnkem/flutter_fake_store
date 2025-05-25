@@ -6,17 +6,17 @@ mixin SafeCall {
   final _successCodes = [200, 201];
 
   Future<Result<T>> safeApiCall<T>(
-      {required Future Function() apiCall,
+      {required Future<Response> Function() apiCall,
       required T Function(dynamic json) fromJson}) async {
     try {
       final response = await apiCall();
-      final statusCode = response.response.statusCode ?? 0;
+      final statusCode = response.statusCode ?? 0;
 
       if (_successCodes.contains(statusCode) && response.data != null) {
         return Success(data: _parseApiData(response.data, fromJson));
       } else {
         return Failure(
-          message: 'Unexpected error: ${response.response.statusMessage}',
+          message: 'Unexpected error: ${response.statusMessage}',
           statusCode: statusCode,
         );
       }

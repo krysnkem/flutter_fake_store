@@ -1,7 +1,7 @@
 import 'package:injectable/injectable.dart';
 import 'package:dio/dio.dart';
 
-@injectable
+@singleton
 class ApiClient {
   final Dio _dio;
   ApiClient(this._dio);
