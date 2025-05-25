@@ -22,11 +22,14 @@ class ProductDetailPage extends StatelessWidget {
       backgroundColor: AppColors.lightBackground,
       appBar: AppBar(
         backgroundColor: AppColors.lightBackground,
+        leading: const SizedBox(),
         actions: [
           IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
-              // Handle favorite action
+              if (ModalRoute.of(context)?.canPop ?? false) {
+                Navigator.pop(context);
+              }
             },
           ),
           const Spacer(),

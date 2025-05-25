@@ -60,7 +60,7 @@ class AppRoutes {
         ],
       ),
       GoRoute(
-        path: productDetail,
+        path: _productDetail,
         builder: (context, state) => const ProductDetailPage(),
       ),
     ],
@@ -72,5 +72,6 @@ class AppRoutes {
   static String get home => '/home';
   static String get wishlist => '/wishlist';
   static String get cart => '/cart';
-  static String get productDetail => '/product/:id';
+  static String get _productDetail => '/product/:id';
+  static String getProduct(String id) => _productDetail.replaceAll(':id', id);
 }
