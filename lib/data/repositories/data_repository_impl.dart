@@ -10,6 +10,7 @@ import 'package:flutter_fake_store/data/models/result.dart';
 import 'package:flutter_fake_store/data/repositories/data_repository.dart';
 import 'package:flutter_fake_store/data/repositories/safe_call.dart';
 import 'package:injectable/injectable.dart';
+import 'dart:developer';
 
 @LazySingleton(as: DataRepository)
 class DataRepositoryImpl with SafeCall implements DataRepository {
@@ -57,7 +58,8 @@ class DataRepositoryImpl with SafeCall implements DataRepository {
       await _cacheService.write(_cartKey, jsonEncode(cartJsons));
 
       return Success();
-    } catch (e) {
+    } catch (e, stackTrace) {
+      log('Failed to add to cart: $e', stackTrace: stackTrace);
       return Failure(message: 'Failed to add to cart: ${e.toString()}');
     }
   }
@@ -83,7 +85,8 @@ class DataRepositoryImpl with SafeCall implements DataRepository {
       await _cacheService.write(_favoritesKey, jsonEncode(productIDs));
 
       return Success();
-    } catch (e) {
+    } catch (e, stackTrace) {
+      log('Failed to add to favourites: $e', stackTrace: stackTrace);
       return Failure(message: 'Failed to add to favourites: ${e.toString()}');
     }
   }
@@ -93,7 +96,8 @@ class DataRepositoryImpl with SafeCall implements DataRepository {
     try {
       await _cacheService.delete(_cartKey);
       return Success();
-    } catch (e) {
+    } catch (e, stackTrace) {
+      log('Failed to clear cart: $e', stackTrace: stackTrace);
       return Failure(message: 'Failed to clear cart: ${e.toString()}');
     }
   }
@@ -103,7 +107,8 @@ class DataRepositoryImpl with SafeCall implements DataRepository {
     try {
       await _cacheService.delete(_favoritesKey);
       return Success();
-    } catch (e) {
+    } catch (e, stackTrace) {
+      log('Failed to clear favourites: $e', stackTrace: stackTrace);
       return Failure(message: 'Failed to clear favourites: ${e.toString()}');
     }
   }
@@ -122,7 +127,8 @@ class DataRepositoryImpl with SafeCall implements DataRepository {
             .toList();
       }
       return Success(data: cartItems);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      log('Failed to get cart items: $e', stackTrace: stackTrace);
       return Failure(message: 'Failed to get cart items: ${e.toString()}');
     }
   }
@@ -134,11 +140,14 @@ class DataRepositoryImpl with SafeCall implements DataRepository {
 
       List<int> products = [];
       if (favourites != null) {
-        final productJson = jsonDecode(favourites) as List<int>;
-        products.addAll(productJson);
+        final productJson = jsonDecode(favourites);
+        List<int> productIds = List<int>.from(productJson);
+
+        products.addAll(productIds);
       }
       return Success(data: products);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      log('Failed to get favourites: $e', stackTrace: stackTrace);
       return Failure(message: 'Failed to get favourites: ${e.toString()}');
     }
   }
@@ -183,7 +192,8 @@ class DataRepositoryImpl with SafeCall implements DataRepository {
         _cacheService.delete(_usernameKey),
       ]);
       return Success();
-    } catch (e) {
+    } catch (e, stackTrace) {
+      log('Failed to logout: $e', stackTrace: stackTrace);
       return Failure(message: 'Failed to logout: ${e.toString()}');
     }
   }
@@ -211,7 +221,8 @@ class DataRepositoryImpl with SafeCall implements DataRepository {
       final cartJsons = cartItems.map((item) => item.toJson()).toList();
       await _cacheService.write(_cartKey, jsonEncode(cartJsons));
       return Success();
-    } catch (e) {
+    } catch (e, stackTrace) {
+      log('Failed to remove from cart: $e', stackTrace: stackTrace);
       return Failure(message: 'Failed to remove from cart: ${e.toString()}');
     }
   }
@@ -236,7 +247,8 @@ class DataRepositoryImpl with SafeCall implements DataRepository {
       // Save updated cart
       await _cacheService.write(_favoritesKey, jsonEncode(products));
       return Success();
-    } catch (e) {
+    } catch (e, stackTrace) {
+      log('Failed to remove from favourites: $e', stackTrace: stackTrace);
       return Failure(
         message: 'Failed to remove from favourites: ${e.toString()}',
       );
@@ -254,7 +266,8 @@ class DataRepositoryImpl with SafeCall implements DataRepository {
           SavedUser(username: username ?? ''),
         ),
       );
-    } catch (e) {
+    } catch (e, stackTrace) {
+      log('Failed to check login status: $e', stackTrace: stackTrace);
       return Failure(message: 'Failed to check login status: ${e.toString()}');
     }
   }

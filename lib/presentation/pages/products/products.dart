@@ -9,6 +9,9 @@ import 'package:flutter_fake_store/presentation/blocs/auth/auth_state.dart';
 import 'package:flutter_fake_store/presentation/blocs/products/products_bloc.dart';
 import 'package:flutter_fake_store/presentation/blocs/products/products_event.dart';
 import 'package:flutter_fake_store/presentation/blocs/products/products_state.dart';
+import 'package:flutter_fake_store/presentation/blocs/wishlist/wishlist_bloc.dart';
+import 'package:flutter_fake_store/presentation/blocs/wishlist/wishlist_event.dart';
+import 'package:flutter_fake_store/presentation/blocs/wishlist/wishlist_state.dart';
 import 'package:flutter_fake_store/presentation/widgets/products/failed_to_load_more.dart';
 import 'package:flutter_fake_store/presentation/widgets/products/loading_products.dart';
 import 'package:flutter_fake_store/presentation/widgets/products/no_products_found.dart';
@@ -74,7 +77,26 @@ class ProductsPage extends StatelessWidget {
 
               BlocBuilder<ProductsBloc, ProductsState>(
                 builder: (context, state) {
-                  final wishlistProductIds = <String>[];
+                  final wishlistProductIds = <int>[];
+                  final wishlistBloc = context.watch<WishlistBloc>();
+                  final wishlistState = wishlistBloc.state;
+                  if (wishlistState is WishlistLoaded) {
+                    wishlistProductIds.addAll(wishlistState.productIds);
+                  } else if (wishlistState is WislistUpdateError) {
+                    wishlistProductIds.addAll(wishlistState.productIds);
+                  }
+
+                  final onAddToWishList = wishlistState is WishlistLoading
+                      ? null
+                      : (Product product) {
+                          if (wishlistProductIds.contains(product.id)) {
+                            wishlistBloc
+                                .add(WishlistProductRemoved(product.id));
+                          } else {
+                            wishlistBloc.add(WishlistProductAdded(product.id));
+                          }
+                        };
+
                   switch (state) {
                     case ProductsInitial():
                     case ProductsLoadingAllProducts():
@@ -93,7 +115,8 @@ class ProductsPage extends StatelessWidget {
                             product.id.toString(),
                           ),
                         ),
-                      wishListProductIds: wishlistProductIds,
+                        wishListProductIds: wishlistProductIds,
+                        onAddToWishList: onAddToWishList,
                       );
                     case ProductsLoadingMoreProducts(
                         products: final prods,
@@ -110,6 +133,7 @@ class ProductsPage extends StatelessWidget {
                           ),
                         ),
                         wishListProductIds: wishlistProductIds,
+                        onAddToWishList: onAddToWishList,
                       );
                     case MoreProductsError(
                         products: final prods,
@@ -131,6 +155,7 @@ class ProductsPage extends StatelessWidget {
                                 ),
                               ),
                               wishListProductIds: wishlistProductIds,
+                              onAddToWishList: onAddToWishList,
                             ),
                           ),
                           FailedToLoadMore(msg: msg),
@@ -165,7 +190,7 @@ class ProductListSection extends StatefulWidget {
   final Future Function()? onRefresh;
   final void Function(Product product)? onTap;
   final void Function(Product product)? onAddToWishList;
-  final List<String> wishListProductIds;
+  final List<int> wishListProductIds;
 
   @override
   State<ProductListSection> createState() => _ProductListSectionState();
@@ -218,8 +243,7 @@ class _ProductListSectionState extends State<ProductListSection> {
             final category = product.category;
             final rating = product.rating.rate.toStringAsFixed(2);
             var price = product.price.toStringAsFixed(2);
-            final isFavorite =
-                widget.wishListProductIds.contains(product.id.toString());
+            final isFavorite = widget.wishListProductIds.contains(product.id);
             return InkWell(
               onTap: () => widget.onTap?.call(product),
               child: ProductListItem(

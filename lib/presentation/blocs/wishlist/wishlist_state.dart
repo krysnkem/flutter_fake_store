@@ -7,9 +7,7 @@ sealed class WishlistState extends Equatable {
   List<Object> get props => [];
 }
 
-final class WishlistInitial extends WishlistState {
-  
-}
+final class WishlistInitial extends WishlistState {}
 
 final class WishlistLoading extends WishlistState {}
 
@@ -33,4 +31,7 @@ final class WishlistError extends WishlistState {
 final class WislistUpdateError extends WishlistError {
   final Set<int> productIds;
   const WislistUpdateError({required super.message, required this.productIds});
+
+  @override
+  List<Object> get props => [message, productIds];
 }
