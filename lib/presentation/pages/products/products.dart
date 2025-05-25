@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_fake_store/core/constants/image_constants.dart';
 import 'package:flutter_fake_store/core/utils/extensions/context_extensions.dart';
 import 'package:flutter_fake_store/core/utils/theme/app_text_styles.dart';
+import 'package:flutter_fake_store/presentation/blocs/auth/auth_bloc.dart';
+import 'package:flutter_fake_store/presentation/blocs/auth/auth_state.dart';
 import 'package:flutter_fake_store/presentation/widgets/logout_icon_button.dart';
 import 'package:flutter_fake_store/presentation/widgets/page_spacing.dart';
 import 'package:flutter_fake_store/presentation/widgets/products/product_list_item.dart';
@@ -27,10 +30,15 @@ class ProductsPage extends StatelessWidget {
                         '${context.welcome},',
                         style: AppTextStyles.urbanist24600TextBlack,
                       ),
-                      const Text(
-                        'username',
-                        style: AppTextStyles.urbanist24600TextBlack,
-                      ),
+                      Builder(builder: (context) {
+                        final authstate = context.watch<AuthBloc>().state;
+                        return Text(
+                          authstate is AuthAuthenticatedState
+                              ? authstate.username
+                              : 'username',
+                          style: AppTextStyles.urbanist24600TextBlack,
+                        );
+                      }),
                     ],
                   ),
                   const Spacer(),

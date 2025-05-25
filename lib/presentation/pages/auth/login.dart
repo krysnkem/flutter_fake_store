@@ -37,7 +37,7 @@ class _LoginScreenState extends State<LoginScreen> {
       appBar: AppBar(),
       body: PageSpacing(
         child: Form(
-          autovalidateMode: AutovalidateMode.onUserInteraction,
+          autovalidateMode: AutovalidateMode.onUnfocus,
           child: Column(
             children: [
               Text(
@@ -48,6 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: context.height(32),
               ), // Add some spacing
               TextFormField(
+                controller: usernameController,
                 decoration: InputDecoration(
                   hintText: context.enterYourUsername,
                 ),
@@ -56,7 +57,9 @@ class _LoginScreenState extends State<LoginScreen> {
               SizedBox(
                 height: context.height(16),
               ),
-              const PasswordFormField(),
+              PasswordFormField(
+                controller: passwordController,
+              ),
               SizedBox(
                 height: context.height(32),
               ),
