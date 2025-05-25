@@ -31,11 +31,14 @@ class ProductsPage extends StatelessWidget {
                         style: AppTextStyles.urbanist24600TextBlack,
                       ),
                       Builder(builder: (context) {
-                        final authstate = context.watch<AuthBloc>().state;
+                        final username = context.select<AuthBloc, String?>(
+                            (authbloc) =>
+                                authbloc.state is AuthAuthenticatedState
+                                    ? (authbloc.state as AuthAuthenticatedState)
+                                        .username
+                                    : null);
                         return Text(
-                          authstate is AuthAuthenticatedState
-                              ? authstate.username
-                              : 'username',
+                          username ?? 'username',
                           style: AppTextStyles.urbanist24600TextBlack,
                         );
                       }),
