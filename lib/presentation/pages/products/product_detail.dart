@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_fake_store/core/constants/image_constants.dart';
 import 'package:flutter_fake_store/core/utils/extensions/context_extensions.dart';
 import 'package:flutter_fake_store/core/utils/theme/app_colors.dart';
 import 'package:flutter_fake_store/core/utils/theme/app_text_styles.dart';
 import 'package:flutter_fake_store/data/models/product/product.dart';
+import 'package:flutter_fake_store/presentation/blocs/wishlist/wishlist_bloc.dart';
+import 'package:flutter_fake_store/presentation/blocs/wishlist/wishlist_event.dart';
+import 'package:flutter_fake_store/presentation/blocs/wishlist/wishlist_state.dart';
 import 'package:flutter_fake_store/presentation/widgets/favourites_icon_button.dart';
 
 class ProductDetailPage extends StatelessWidget {
@@ -22,14 +26,36 @@ class ProductDetailPage extends StatelessWidget {
     final int reviewCount = product?.rating.count ?? 100;
     final rating = '\$${product?.rating.rate.toStringAsFixed(2) ?? '0.00'}';
 
+    final wishlistProductIds = <int>[];
+    final wishlistBloc = context.watch<WishlistBloc>();
+    final wishlistState = wishlistBloc.state;
+    if (wishlistState is WishlistLoaded) {
+      wishlistProductIds.addAll(wishlistState.productIds);
+    } else if (wishlistState is WislistUpdateError) {
+      wishlistProductIds.addAll(wishlistState.productIds);
+    }
+
+    final onToggleWishlist = wishlistState is WishlistLoading
+        ? null
+        : (Product product) {
+            if (wishlistProductIds.contains(product.id)) {
+              wishlistBloc.add(WishlistProductRemoved(product.id));
+            } else {
+              wishlistBloc.add(WishlistProductAdded(product.id));
+            }
+          };
+
     return ProducDetail(
-        imageUrl: imageUrl,
-        title: title,
-        subtitle: subtitle,
-        description: description,
-        rating: rating,
-        reviewCount: reviewCount,
-        price: price);
+      imageUrl: imageUrl,
+      title: title,
+      subtitle: subtitle,
+      description: description,
+      rating: rating,
+      reviewCount: reviewCount,
+      price: price,
+      isFavourite: wishlistProductIds.contains(product?.id),
+      onToggleWishlist: () => onToggleWishlist?.call(product!),
+    );
   }
 }
 
@@ -43,6 +69,8 @@ class ProducDetail extends StatelessWidget {
     required this.reviewCount,
     required this.price,
     required this.description,
+    this.onToggleWishlist,
+    required this.isFavourite,
   });
 
   final String imageUrl;
@@ -52,6 +80,8 @@ class ProducDetail extends StatelessWidget {
   final int reviewCount;
   final String price;
   final String description;
+  final bool isFavourite;
+  final VoidCallback? onToggleWishlist;
 
   @override
   Widget build(BuildContext context) {
@@ -70,9 +100,10 @@ class ProducDetail extends StatelessWidget {
             },
           ),
           const Spacer(),
-          const FavouritesIconButton(
-            isFavorite: false,
+          FavouritesIconButton(
+            isFavorite: isFavourite,
             inactiveColor: AppColors.textGrey80,
+            onToggleWishlist: onToggleWishlist,
           ),
         ],
       ),

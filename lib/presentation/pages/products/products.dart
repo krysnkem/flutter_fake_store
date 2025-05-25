@@ -86,7 +86,7 @@ class ProductsPage extends StatelessWidget {
                     wishlistProductIds.addAll(wishlistState.productIds);
                   }
 
-                  final onAddToWishList = wishlistState is WishlistLoading
+                  final onToggleWishlist = wishlistState is WishlistLoading
                       ? null
                       : (Product product) {
                           if (wishlistProductIds.contains(product.id)) {
@@ -116,7 +116,7 @@ class ProductsPage extends StatelessWidget {
                           ),
                         ),
                         wishListProductIds: wishlistProductIds,
-                        onAddToWishList: onAddToWishList,
+                        onAddToWishList: onToggleWishlist,
                       );
                     case ProductsLoadingMoreProducts(
                         products: final prods,
@@ -133,7 +133,7 @@ class ProductsPage extends StatelessWidget {
                           ),
                         ),
                         wishListProductIds: wishlistProductIds,
-                        onAddToWishList: onAddToWishList,
+                        onAddToWishList: onToggleWishlist,
                       );
                     case MoreProductsError(
                         products: final prods,
@@ -155,7 +155,7 @@ class ProductsPage extends StatelessWidget {
                                 ),
                               ),
                               wishListProductIds: wishlistProductIds,
-                              onAddToWishList: onAddToWishList,
+                              onAddToWishList: onToggleWishlist,
                             ),
                           ),
                           FailedToLoadMore(msg: msg),

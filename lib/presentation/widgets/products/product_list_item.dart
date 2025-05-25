@@ -134,7 +134,7 @@ class ProductListItem extends StatelessWidget {
             children: [
               FavouritesIconButton(
                 isFavorite: isFavorite,
-                onAddToWishList: onAddToWishList,
+                onToggleWishlist: onAddToWishList,
                 inactiveColor: AppColors.textGrey80,
               ),
             ],
