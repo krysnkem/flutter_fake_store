@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_fake_store/core/utils/theme/app_colors.dart';
 
 class ExpandableText extends StatefulWidget {
   const ExpandableText({
@@ -56,22 +57,27 @@ class _ExpandableTextState extends State<ExpandableText> {
           overflow: _isExpanded ? null : TextOverflow.ellipsis,
         ),
         if (_hasOverflow)
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                _isExpanded = !_isExpanded;
-              });
-            },
-            child: Padding(
-              padding: const EdgeInsets.only(top: 4),
-              child: Text(
-                _isExpanded ? 'Show less' : 'Show more',
-                style: widget.style.copyWith(
-                  color: Colors.blue,
-                  fontWeight: FontWeight.w600,
+          Row(
+            children: [
+              const Spacer(),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _isExpanded = !_isExpanded;
+                  });
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 4),
+                  child: Text(
+                    _isExpanded ? 'Show less' : 'Show more',
+                    style: widget.style.copyWith(
+                      color: AppColors.textBlack,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 ),
               ),
-            ),
+            ],
           ),
       ],
     );

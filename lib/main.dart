@@ -5,6 +5,8 @@ import 'package:flutter_fake_store/core/utils/theme/app_theme.dart';
 import 'package:flutter_fake_store/injection/injection.dart';
 import 'package:flutter_fake_store/presentation/blocs/auth/auth_bloc.dart';
 import 'package:flutter_fake_store/presentation/blocs/auth/auth_event.dart';
+import 'package:flutter_fake_store/presentation/blocs/cart/cart_bloc.dart';
+import 'package:flutter_fake_store/presentation/blocs/cart/cart_event.dart';
 import 'package:flutter_fake_store/presentation/blocs/products/products_bloc.dart';
 import 'package:flutter_fake_store/presentation/blocs/products/products_event.dart';
 import 'package:flutter_fake_store/presentation/blocs/wishlist/wishlist_bloc.dart';
@@ -40,6 +42,10 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => getIt<WishlistBloc>()..add(const GetWishlist()),
+          lazy: true,
+        ),
+        BlocProvider(
+          create: (context) => getIt<CartBloc>()..add(const GetCartItems()),
           lazy: true,
         ),
       ],

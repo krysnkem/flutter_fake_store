@@ -41,7 +41,7 @@ class DataRepositoryImpl with SafeCall implements DataRepository {
         // Update existing item quantity
         final existingItem = cartItems[existingItemIndex];
         final updatedItem = existingItem.copyWith(
-          quantity: existingItem.quantity + quantity,
+          quantity: quantity,
         );
         cartItems[existingItemIndex] = updatedItem;
       } else {
