@@ -134,26 +134,28 @@ class _ProductsPageState extends State<ProductsPage> {
                         message: final msg
                       ):
                       // Display loaded products and an error for the "load more" action
-                      return Column(
-                        children: [
-                          Expanded(
-                            child: ProductListSection(
-                              products: prods,
-                              onRefresh: () async =>
-                                  context.read<ProductsBloc>().add(
-                                        const GetAllProducts(),
-                                      ),
-                              onTap: (product) => context.push(
-                                AppRoutes.getProduct(
-                                  product.id.toString(),
+                      return Expanded(
+                        child: Column(
+                          children: [
+                            Expanded(
+                              child: ProductListSection(
+                                products: prods,
+                                onRefresh: () async =>
+                                    context.read<ProductsBloc>().add(
+                                          const GetAllProducts(),
+                                        ),
+                                onTap: (product) => context.push(
+                                  AppRoutes.getProduct(
+                                    product.id.toString(),
+                                  ),
                                 ),
+                                wishListProductIds: wishlistProductIds,
+                                onAddToWishList: onToggleWishlist,
                               ),
-                              wishListProductIds: wishlistProductIds,
-                              onAddToWishList: onToggleWishlist,
                             ),
-                          ),
-                          FailedToLoadMore(msg: msg),
-                        ],
+                            FailedToLoadMore(msg: msg),
+                          ],
+                        ),
                       );
                     case ProductsError(message: final msg):
                       return ProductsErrorDisplay(

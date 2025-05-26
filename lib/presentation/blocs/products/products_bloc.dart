@@ -61,7 +61,13 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
         );
       }
     } catch (e) {
-      emit(ProductsError(message: e.toString()));
+      // emit(ProductsError(message: e.toString()));
+      emit(
+        MoreProductsError(
+          message: e.toString(),
+          products: productList,
+        ),
+      );
       log('Error geting more products: $e');
     }
   }
