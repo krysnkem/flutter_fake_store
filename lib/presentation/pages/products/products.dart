@@ -175,7 +175,7 @@ class _ProductsPageState extends State<ProductsPage> {
                       );
                     case ProductsError(message: final msg):
                       return ProductsErrorDisplay(
-                        message: 'Error: $msg',
+                        message: 'Error: $msg \nKindly Pull down to refresh',
                         refresh: () async => context
                             .read<ProductsBloc>()
                             .add(const GetAllProducts()),
