@@ -30,7 +30,7 @@ The application follows a clean architecture pattern, separating concerns into d
     *   Responds to user interactions (e.g., button taps, gestures).
     *   Listens to state changes from BLoCs and rebuilds accordingly.
     *   Dispatches events to BLoCs to trigger business logic.
-    *   Examples: `ProductsPage`, `CartPage`, `ProductListItem`, `WishlistItem`.
+    *   Examples: `Products` page, `Cart`page, `ProductListItem`, `WishlistItem`.
 
 2.  **BLoC (Business Logic Layer):**
     *   Located in `lib/presentation/blocs/`.
@@ -50,13 +50,13 @@ The application follows a clean architecture pattern, separating concerns into d
 
 4.  **API Client / Cache (Data Sources):**
     *   **API Client:**
-        *   Located in `lib/data/network/` (or similar).
+        *   Located in `lib/data/api/` .
         *   Responsible for making network requests to the backend API (e.g., FakeStoreAPI).
         *   Handles HTTP methods (GET, POST, PUT, DELETE), request/response serialization/deserialization.
         *   Often uses libraries like `dio` or `http`.
     *   **Cache (Local Data Storage):**
-        *   Could involve using `shared_preferences` for simple key-value storage, or a local database like `sqflite` or `isar` for more complex structured data.
-        *   The `DataRepository` would interact with this layer to store and retrieve cached data. (While not explicitly detailed in the provided files, this is where it would fit).
+        *   Could involve using `shared_preferences` for simple key-value storage.
+        *   The `DataRepository` would interact with this layer to store and retrieve cached data.
 
 ## Key Libraries & Technologies
 
