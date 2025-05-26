@@ -9,9 +9,7 @@ import 'package:flutter_fake_store/presentation/blocs/auth/auth_state.dart';
 import 'package:flutter_fake_store/presentation/blocs/products/products_bloc.dart';
 import 'package:flutter_fake_store/presentation/blocs/products/products_event.dart';
 import 'package:flutter_fake_store/presentation/blocs/products/products_state.dart';
-import 'package:flutter_fake_store/presentation/blocs/wishlist/wishlist_bloc.dart';
-import 'package:flutter_fake_store/presentation/blocs/wishlist/wishlist_event.dart';
-import 'package:flutter_fake_store/presentation/blocs/wishlist/wishlist_state.dart';
+import 'package:flutter_fake_store/presentation/utils/wishlist_input_utlis.dart';
 import 'package:flutter_fake_store/presentation/widgets/products/failed_to_load_more.dart';
 import 'package:flutter_fake_store/presentation/widgets/products/loading_products.dart';
 import 'package:flutter_fake_store/presentation/widgets/products/no_products_found.dart';
@@ -89,26 +87,10 @@ class _ProductsPageState extends State<ProductsPage> {
 
               BlocBuilder<ProductsBloc, ProductsState>(
                 builder: (context, state) {
-                  final wishlistProductIds = <int>[];
-                  final wishlistBloc = context.watch<WishlistBloc>();
-                  final wishlistState = wishlistBloc.state;
-                  if (wishlistState is WishlistLoaded) {
-                    wishlistProductIds.addAll(wishlistState.productIds);
-                  } else if (wishlistState is WislistUpdateError) {
-                    wishlistProductIds.addAll(wishlistState.productIds);
-                  }
-
-                  final onToggleWishlist = wishlistState is WishlistLoading
-                      ? null
-                      : (Product product) {
-                          if (wishlistProductIds.contains(product.id)) {
-                            wishlistBloc
-                                .add(WishlistProductRemoved(product.id));
-                          } else {
-                            wishlistBloc.add(WishlistProductAdded(product.id));
-                          }
-                        };
-
+                  final interaction = context.getWishListScreenInput();
+                  final wishlistProductIds =
+                      interaction.wishListProductIDs.toList();
+                  final onToggleWishlist = interaction.onToggleWishlist;
                   switch (state) {
                     case ProductsInitial():
                     case ProductsLoadingAllProducts():
