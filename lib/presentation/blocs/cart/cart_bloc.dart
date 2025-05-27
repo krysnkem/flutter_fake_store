@@ -144,5 +144,6 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
   FutureOr<void> _onResetCart(ResetCartItems event, Emitter<CartState> emit) {
     emit(CartStateInitial());
+    _dataRepository.clearCart();
   }
 }
