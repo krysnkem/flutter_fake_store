@@ -116,6 +116,5 @@ class WishlistBloc extends Bloc<WishlistEvent, WishlistState> {
     emit(
       WishlistInitial(),
     );
-    _dataRepository.clearFavorites();
   }
 }
